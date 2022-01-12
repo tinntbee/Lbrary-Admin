@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import adminAPI from "../../api/adminAPI";
+import { useHistory } from "react-router-dom";
 
 Sidebar.propTypes = {};
 
 function Sidebar(props) {
+  const history = useHistory();
+  const [admin, setAdmin] = useState({
+    avatar: "dist/img/user2-160x160.jpg",
+    name: "Admin",
+  });
+  useEffect(() => {
+    adminAPI
+      .reSign()
+      .then((res) => {
+        setAdmin(res.admin);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          history.replace("/login");
+        }
+      });
+  }, []);
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       {/* Sidebar */}
@@ -12,17 +31,18 @@ function Sidebar(props) {
         <div className="user-panel mt-3 pb-3 mb-3 d-flex">
           <div className="image">
             <img
-              src="dist/img/user2-160x160.jpg"
+              src={admin.avatar}
               className="img-circle elevation-2"
               alt="User Image"
             />
           </div>
           <div className="info">
             <a href="#" className="d-block">
-              Alexander Pierce
+              {admin.name}
             </a>
           </div>
         </div>
+
         <nav className="mt-2">
           <ul
             className="nav nav-pills nav-sidebar flex-column"

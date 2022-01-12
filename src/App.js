@@ -1,17 +1,28 @@
-import logo from "./logo.svg";
 import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
-import UserFeature from "./features/UserFeature";
 import BookFeature from "./features/BookFeature";
+import LoginFeature from "./features/LoginFeature";
+import UserFeature from "./features/UserFeature";
 
 function App() {
   return (
     <>
-      <Nav />
-      <Sidebar />
+      <Route
+        render={({ location }) =>
+          ["/login"].includes(location.pathname) ? null : (
+            <>
+              <Nav />
+              <Sidebar />
+            </>
+          )
+        }
+      />
+
       <Switch>
+        <Redirect from="/" to="/user" exact />
+        <Route path="/login" component={LoginFeature} exact />
         <Route path="/user" component={UserFeature} exact />
         <Route path="/book" component={BookFeature} exact />
       </Switch>

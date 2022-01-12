@@ -84,6 +84,13 @@
       rel="stylesheet"
       href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
     />
+    <!-- SweetAlert2 -->
+    <link
+      rel="stylesheet"
+      href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css"
+    />
+    <!-- Toastr -->
+    <link rel="stylesheet" href="../../plugins/toastr/toastr.min.css" />
     <title>React App</title>
   </head>
   <body
@@ -154,8 +161,38 @@
     <script src="../../plugins/select2/js/select2.full.min.js"></script>
     <!-- bs-custom-file-input -->
     <script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- Toastr -->
+    <script src="../../plugins/toastr/toastr.min.js"></script>
     <script>
-      $(function () {
+      // $(function () {
+      //   $("#example1")
+      //     .DataTable({
+      //       responsive: true,
+      //       lengthChange: false,
+      //       autoWidth: false,
+      //       buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+      //     })
+      //     .buttons()
+      //     .container()
+      //     .appendTo("#example1_wrapper .col-md-6:eq(0)");
+      //   $("#example2").DataTable({
+      //     paging: true,
+      //     lengthChange: false,
+      //     searching: false,
+      //     ordering: true,
+      //     info: true,
+      //     autoWidth: false,
+      //     responsive: true,
+      //   });
+      // });
+      function editor() {
+        // Summernote
+        $("#summernote").summernote();
+      }
+      function rawTable() {
+        $("#example1").dataTable().fnDestroy();
         $("#example1")
           .DataTable({
             responsive: true,
@@ -166,36 +203,22 @@
           .buttons()
           .container()
           .appendTo("#example1_wrapper .col-md-6:eq(0)");
-        $("#example2").DataTable({
-          paging: true,
-          lengthChange: false,
-          searching: false,
-          ordering: true,
-          info: true,
-          autoWidth: false,
-          responsive: true,
-        });
-      });
+      }
     </script>
     <script>
-      $(function () {
-        // Summernote
-        $("#summernote").summernote();
+      var Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      });
 
-        // CodeMirror
-        CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
-          mode: "htmlmixed",
-          theme: "monokai",
+      function pushToast(icon, title) {
+        Toast.fire({
+          icon: icon,
+          title: title,
         });
-      });
-      //Initialize Select2 Elements
-      $(function () {
-        //Initialize Select2 Elements
-        $(".select2").select2();
-      });
-      $(function () {
-        bsCustomFileInput.init();
-      });
+      }
     </script>
   </body>
 </html>

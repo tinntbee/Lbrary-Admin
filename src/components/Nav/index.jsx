@@ -1,9 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
+import adminAPI from "../../api/adminAPI";
 
 Nav.propTypes = {};
 
 function Nav(props) {
+  const history = useHistory();
+  const handleLogoutClick = () => {
+    adminAPI.logout();
+    history.replace("/login");
+  };
   return (
     <nav className="main-header navbar navbar-expand navbar-dark">
       {/* Left navbar links */}
@@ -16,7 +23,12 @@ function Nav(props) {
       </ul>
       <ul class="navbar-nav ml-auto">
         <li className="nav-item">
-          <a className="nav-link" href="#" role="button">
+          <a
+            className="nav-link"
+            href="#"
+            role="button"
+            onClick={handleLogoutClick}
+          >
             Đăng xuất <i className="fas fa-sign-out-alt" />
           </a>
         </li>

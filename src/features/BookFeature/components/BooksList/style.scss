@@ -6,6 +6,9 @@
   border: 2px dashed #6c757d;
   margin: auto;
   position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 
   & > input {
     height: 100%;
@@ -19,6 +22,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #6C757D;
+    color: #6c757d;
   }
+}
+
+.tags-list {
+  max-height: 100px;
+  overflow-y: auto;
+  margin-bottom: 10px;
 }

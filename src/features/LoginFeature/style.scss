@@ -1,0 +1,86 @@
+@mixin animation-mixin($name, $from, $to) {
+  @keyframes show {
+    0% {
+      background-position: 20%;
+      background-size: auto 120%;
+    }
+    100% {
+      background-size: auto 100%;
+      background-position: 70%;
+    }
+  }
+  @keyframes login-box {
+    0% {
+      opacity: 0;
+      right: -400px;
+    }
+    100% {
+      opacity: 1;
+      right: 200px;
+    }
+  }
+}
+@include animation-mixin(slide-1, 30%, 0);
+
+.login-feature {
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  animation: show 2s ease-in-out;
+  background-size: auto 100%;
+  background-position: 70%;
+  position: relative;
+  overflow: hidden;
+
+  & > .login-box {
+    width: 350px;
+    border-radius: 10px;
+    background: var(--primary-color-blue);
+    position: absolute;
+    right: 200px;
+    top: 200px;
+    animation: login-box 2s ease-in-out;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    & > .title {
+      font-size: 30px;
+      font-weight: 500;
+    }
+
+    & > .message {
+      width: 100%;
+      padding: 10px;
+      background: var(--red-color);
+    }
+
+    & > input {
+      width: 100%;
+      outline: none;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+
+    & > button {
+      width: 100%;
+      padding: 10px;
+      background: var(--primary-color-orange);
+      color: var(--white-color);
+      font-size: 18px;
+      font-weight: 500;
+      outline: none;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+
+      &:disabled{
+        background: var(--text-gray100-color-90);
+      }
+    }
+  }
+}
