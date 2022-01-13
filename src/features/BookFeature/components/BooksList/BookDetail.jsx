@@ -26,7 +26,7 @@ function BookDetail(props) {
   const [book, setBook] = useState({
     _id: "new",
     name: "",
-    authors: "",
+    author: "",
     tags: [],
     description: "",
     image: "",
@@ -52,7 +52,7 @@ function BookDetail(props) {
     setBook({ ...book, name: e.target.value });
   };
   const handleAuthorChange = (e) => {
-    setBook({ ...book, authors: e.target.value });
+    setBook({ ...book, author: e.target.value });
   };
   const handlePriceChange = (e) => {
     if (e.target.value >= 0) {
@@ -317,7 +317,7 @@ function BookDetail(props) {
                         type="text"
                         class="form-control"
                         placeholder="Nhập vào tên tác giả"
-                        value={book?.authors}
+                        value={book?.author}
                         onChange={handleAuthorChange}
                       />
                     </div>
@@ -473,7 +473,11 @@ function BookDetail(props) {
                         className="image-book-input"
                         style={{ backgroundImage: `url("${image.url}")` }}
                       >
-                        <input type="file" onChange={handleImageChange} />
+                        <input
+                          type="file"
+                          onChange={handleImageChange}
+                          accept="image/png, image/gif, image/jpeg"
+                        />
                         <p>Kéo thả ảnh</p>
                       </div>
                     </div>

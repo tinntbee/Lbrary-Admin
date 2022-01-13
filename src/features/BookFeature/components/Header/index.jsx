@@ -1,16 +1,50 @@
 import React from "react";
 import PropTypes from "prop-types";
+import adminAPI from "../../../../api/adminAPI";
+import { useEffect } from "react";
+import { useState } from "react";
 
 Header.propTypes = {};
 
 function Header(props) {
+  //   avgDislike: 0.1
+  // avgLike: 0.5
+  // avgReach: 1.6
+  // totalBooks: 10
+  // totalHoa: 40
+  // totalNewBooks: 3
+  // totalReach: 16
+  // totalRead: 44
+  const [data, setDate] = useState({
+    avgDislike: 0,
+    avgLike: 0,
+    avgReach: 0,
+    totalBooks: 0,
+    totalHoa: 0,
+    totalNewBooks: 0,
+    totalReach: 0,
+    totalRead: 0,
+  });
+  const fetchData = async () => {
+    adminAPI
+      .bookStatistical()
+      .then((res) => {
+        setDate({ ...data, ...res });
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
       <div className="row">
         <div class="col-lg-3 col-6">
           <div class="small-box bg-info">
             <div class="inner">
-              <h3>150</h3>
+              <h3>{data.totalNewBooks}</h3>
               <p>Sách mới</p>
             </div>
             <div class="icon">
@@ -21,7 +55,7 @@ function Header(props) {
         <div class="col-lg-3 col-6">
           <div class="small-box bg-danger">
             <div class="inner">
-              <h3>150</h3>
+              <h3>{data.totalBooks}</h3>
               <p>Tổng số sách</p>
             </div>
             <div class="icon">
@@ -32,7 +66,7 @@ function Header(props) {
         <div class="col-lg-3 col-6">
           <div class="small-box bg-success">
             <div class="inner">
-              <h3>150</h3>
+              <h3>{data.totalRead}</h3>
               <p>Đã bán</p>
             </div>
             <div class="icon">
@@ -43,7 +77,7 @@ function Header(props) {
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>2,000</h3>
+              <h3>{data.totalHoa}</h3>
               <p>Doanh thu</p>
             </div>
             <div class="icon">
@@ -60,7 +94,7 @@ function Header(props) {
             </span>
             <div className="info-box-content">
               <span className="info-box-text">Tương tác</span>
-              <span className="info-box-number">10</span>
+              <span className="info-box-number">{data.totalReach}</span>
             </div>
           </div>
         </div>
@@ -71,7 +105,7 @@ function Header(props) {
             </span>
             <div className="info-box-content">
               <span className="info-box-text">Tương tác trung bình</span>
-              <span className="info-box-number">41,410</span>
+              <span className="info-box-number">{data.avgReach}</span>
             </div>
           </div>
         </div>
@@ -85,7 +119,7 @@ function Header(props) {
               <span className="info-box-text">
                 Đánh giá tích cực trung bình
               </span>
-              <span className="info-box-number">7.6</span>
+              <span className="info-box-number">{data.avgLike}</span>
             </div>
           </div>
         </div>
@@ -98,7 +132,7 @@ function Header(props) {
               <span className="info-box-text">
                 Đánh giá tiêu cực trung bình
               </span>
-              <span className="info-box-number">5.5</span>
+              <span className="info-box-number">{data.avgDislike}</span>
             </div>
           </div>
         </div>

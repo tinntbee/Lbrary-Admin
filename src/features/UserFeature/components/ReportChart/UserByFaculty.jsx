@@ -1,24 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Chart } from "react-chartjs-2";
 import {
   Chart as ChartJS,
+  RadialLinearScale,
   ArcElement,
-  LinearScale,
-  CategoryScale,
-  BarElement,
-  PointElement,
-  LineElement,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { PolarArea } from "react-chartjs-2";
 import adminAPI from "../../../../api/adminAPI";
 import { useEffect } from "react";
 import { useState } from "react";
 import randomColor from "randomcolor";
 
-BooksByTags.propTypes = {};
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
+
+UserByFaculty.propTypes = {};
+
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
 const options = {
   plugins: {
@@ -28,40 +27,51 @@ const options = {
         color: "rgb(254,254,254)",
       },
     },
+    scale: {
+      display: false,
+    },
   },
 };
 
-function BooksByTags(props) {
+function UserByFaculty(props) {
+  //     faculties: ['FIT']
+  // userByFaculty: [5]
   const [data, setData] = useState({
-    labels: [],
+    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     datasets: [
       {
-        data: [],
-        backgroundColor: [],
-        borderColor: [],
+        label: "# of Votes",
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.5)",
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(255, 206, 86, 0.5)",
+          "rgba(75, 192, 192, 0.5)",
+          "rgba(153, 102, 255, 0.5)",
+          "rgba(255, 159, 64, 0.5)",
+        ],
         borderWidth: 1,
       },
     ],
   });
   const fetchData = async () => {
     adminAPI
-      .booksByTags()
+      .userByFaculty()
       .then((res) => {
         setData({
-          labels: res.labels,
+          labels: res.faculties,
           datasets: [
             {
-              data: res.data,
-              backgroundColor: res.data.map(() =>
+              label: "# of Votes",
+              data: res.userByFaculty,
+              backgroundColor: res.userByFaculty.map(() =>
                 randomColor({
                   luminosity: "light",
                   format: "rgba",
-                  alpha: 0.2,
+                  alpha: 1,
                 })
               ),
-              borderColor: res.data.map(() => "rgb(254,254,254)"),
               borderWidth: 1,
-              hoverOffset: 4,
             },
           ],
         });
@@ -76,7 +86,7 @@ function BooksByTags(props) {
   return (
     <div className="card card-danger">
       <div className="card-header">
-        <h3 className="card-title">Thống kê theo Thẻ</h3>
+        <h3 className="card-title">Thống kê theo Khoa</h3>
         <div className="card-tools">
           <button
             type="button"
@@ -88,10 +98,10 @@ function BooksByTags(props) {
         </div>
       </div>
       <div className="card-body">
-        <Pie data={data} options={options} />
+        <PolarArea data={data} options={options} />
       </div>
     </div>
   );
 }
 
-export default BooksByTags;
+export default UserByFaculty;

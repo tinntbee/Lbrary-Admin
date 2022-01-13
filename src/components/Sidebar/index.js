@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import adminAPI from "../../api/adminAPI";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 Sidebar.propTypes = {};
 
@@ -51,25 +51,25 @@ function Sidebar(props) {
             data-accordion="false"
           >
             <li className="nav-item">
-              <a href="/user" className="nav-link">
+              <Link to="/user" className="nav-link">
                 <i className="nav-icon fas fa-users" />
                 <p>
                   User
                   <span className="badge badge-info right">2</span>
                 </p>
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a href="/book" className="nav-link">
+              <Link to="/book" className="nav-link">
                 <i className="nav-icon fas fa-book" />
                 <p>Book</p>
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a href="/category" className="nav-link">
+              <Link to="/categories-tags" className="nav-link">
                 <i className="nav-icon fas fa-tags" />
                 <p>Categories & Tags</p>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

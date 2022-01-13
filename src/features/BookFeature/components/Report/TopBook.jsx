@@ -1,9 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
+import adminAPI from "../../../../api/adminAPI";
+import { useEffect } from "react";
+import { useState } from "react";
 
 TopBook.propTypes = {};
 
 function TopBook(props) {
+  // avgReact: 0.5
+  // name: "Toán học và Bóng đá"
+  // totalPoint: 24
+  // totalReach: 4
+  // totalReact: 2
+  // totalRead: 18
+  const [data, setData] = useState([]);
+  const fetchData = async () => {
+    adminAPI
+      .topBooks()
+      .then((res) => {
+        setData(res);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className="card card-info">
       <div className="card-header border-0">
@@ -35,48 +58,17 @@ function TopBook(props) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>Some Product</td>
-              <td>45</td>
-              <td>45</td>
-              <td>78%</td>
-            </tr>
+            {data &&
+              data.map((item, index) => {
+                return (
+                  <tr>
+                    <td>{item.name}</td>
+                    <td>{item.totalRead}</td>
+                    <td>{item.totalReach}</td>
+                    <td>{item.avgReact + "/" + item.totalReact}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>

@@ -63,6 +63,80 @@ const adminAPI = {
     const url = "/admin/banUser/" + _id;
     return axiosClient.put(url, { is_banned });
   },
+
+  //NOTE: Tag manage
+  getAllTagsManage: () => {
+    const url = "/admin/getAllTagsManage";
+    return axiosClient.get(url);
+  },
+  getTagDetail: (_id) => {
+    const url = "/admin/getTagDetail/" + _id;
+    return axiosClient.get(url);
+  },
+  createTag: (tag) => {
+    const url = "/admin/createTag";
+    return axiosClient.post(url, tag);
+  },
+  editTag: (tag) => {
+    const url = "/admin/editTag/" + tag._id;
+    return axiosClient.put(url, tag);
+  },
+  banTag: ({ _id, is_active }) => {
+    const url = "/admin/banTag/" + _id;
+    return axiosClient.put(url, { is_active });
+  },
+
+  //NOTE: Category manage
+  getAllCategories: () => {
+    const url = "/admin/getAllCategories";
+    return axiosClient.get(url);
+  },
+  getCategoryDetail: (_id) => {
+    const url = "/admin/getCategoryDetail/" + _id;
+    return axiosClient.get(url);
+  },
+  createCategory: (category) => {
+    const url = "/admin/createCategory";
+    return axiosClient.post(url, category);
+  },
+  editCategory: (category) => {
+    const url = "/admin/editCategory/" + category._id;
+    return axiosClient.put(url, category);
+  },
+  banCategory: ({ _id, is_active }) => {
+    const url = "/admin/banCategory/" + _id;
+    return axiosClient.put(url, { is_active });
+  },
+
+  //NOTE: report
+  bookStatistical: () => {
+    const url = "/admin/bookStatistical";
+    return axiosClient.get(url);
+  },
+  topBooks: () => {
+    const url = "/admin/topBooks";
+    return axiosClient.get(url);
+  },
+  booksByTags: () => {
+    const url = "/admin/booksByTags";
+    return axiosClient.get(url);
+  },
+  hoaByMonth: () => {
+    const url = "/admin/hoaByMonth";
+    return axiosClient.get(url);
+  },
+  userStatistical: () => {
+    const url = "/admin/userStatistical";
+    return axiosClient.get(url);
+  },
+  userByFaculty: () => {
+    const url = "/admin/userByFaculty";
+    return axiosClient.get(url);
+  },
+  userByMonth: () => {
+    const url = "/admin/userByMonth";
+    return axiosClient.get(url);
+  },
 };
 
 export default adminAPI;

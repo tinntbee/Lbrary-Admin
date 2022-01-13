@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-
+import adminAPI from "../../../../api/adminAPI";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,9 +12,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import adminAPI from "../../../../api/adminAPI";
-import { useState } from "react";
-import { useEffect } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -25,6 +22,8 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+UserByMonth.propTypes = {};
 
 export const options = {
   responsive: true,
@@ -56,8 +55,6 @@ export const options = {
   },
 };
 
-BooksChart.propTypes = {};
-
 const labels = [
   "Tháng 1",
   "Tháng 2",
@@ -72,8 +69,7 @@ const labels = [
   "Tháng 11",
   "Tháng 12",
 ];
-
-function BooksChart(props) {
+function UserByMonth(props) {
   const [data, setData] = useState({
     labels,
     datasets: [
@@ -95,21 +91,21 @@ function BooksChart(props) {
   });
   const fetchData = async () => {
     adminAPI
-      .hoaByMonth()
+      .userByMonth()
       .then((res) => {
         setData({
           labels,
           datasets: [
             {
-              label: res.hoaByMonthLastYear.year,
-              data: res.hoaByMonthLastYear.data,
+              label: res.userByMonthLastYear.year,
+              data: res.userByMonthLastYear.data,
               borderColor: "rgb(255, 99, 132)",
               backgroundColor: "rgba(255, 99, 132, 0.5)",
               yAxisID: "y",
             },
             {
-              label: res.hoaByMonthThisYear.year,
-              data: res.hoaByMonthThisYear.data,
+              label: res.userByMonthThisYear.year,
+              data: res.userByMonthThisYear.data,
               borderColor: "rgb(53, 162, 235)",
               backgroundColor: "rgba(53, 162, 235, 0.5)",
               yAxisID: "y",
@@ -125,9 +121,9 @@ function BooksChart(props) {
     fetchData();
   }, []);
   return (
-    <div className="card card-success">
-      <div className="card-header border-0">
-        <h2 className="card-title">Biểu đồ doanh thu theo tháng</h2>
+    <div className="card card-danger">
+      <div className="card-header">
+        <h3 className="card-title">Thống kê Người dùng mới theo tháng</h3>
         <div className="card-tools">
           <button
             type="button"
@@ -138,11 +134,11 @@ function BooksChart(props) {
           </button>
         </div>
       </div>
-      <div className="card-body table-responsive p-0">
-        <Line options={options} data={data} />
+      <div className="card-body">
+        <Line type="bar" data={data} options={options} />
       </div>
     </div>
   );
 }
 
-export default BooksChart;
+export default UserByMonth;
