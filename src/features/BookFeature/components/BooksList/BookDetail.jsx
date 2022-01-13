@@ -136,9 +136,9 @@ function BookDetail(props) {
 
     //NOTE: get tags
     let tagsForBookSave = [];
-    for (let index = 0; index < tags.length; index++) {
-      const element = tags[index];
-      if (tagsForCheck[index]) {
+    for (let i = 0; i < tags.length; i++) {
+      const element = tags[i];
+      if (tagsForCheck[i]) {
         tagsForBookSave.push(element._id);
       }
     }
@@ -176,7 +176,7 @@ function BookDetail(props) {
       .getBookDetail(_id)
       .then((res) => {
         setBook({ ...book, ...res });
-        setImage({ ...image, url: res.image });
+        setImage({ ...image, file: undefined, url: res.image });
         setLoading(false);
       })
       .catch((err) => {

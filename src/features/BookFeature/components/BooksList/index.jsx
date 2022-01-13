@@ -36,7 +36,7 @@ function BooksList(props) {
     });
   };
   const handleUpdateBooksList = (book, index) => {
-    if (index > 10) {
+    if (index > -1) {
       let newBooks = [...books];
       newBooks[index].name = book.name;
       newBooks[index].price = book.price;
