@@ -1,85 +1,222 @@
 @mixin animation-mixin($name, $from, $to) {
   @keyframes show {
     0% {
-      background-position: 20%;
-      background-size: auto 120%;
+      background-size: 140% 140%;
     }
     100% {
-      background-size: auto 100%;
-      background-position: 70%;
+      background-size: 100% 100%;
     }
   }
   @keyframes login-box {
     0% {
       opacity: 0;
-      right: -400px;
+      transform: scale(0.8);
     }
     100% {
       opacity: 1;
-      right: 200px;
+      transform: scale(1)
     }
   }
 }
+
 @include animation-mixin(slide-1, 30%, 0);
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
 
 .login-feature {
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   background-repeat: no-repeat;
-  animation: show 2s ease-in-out;
-  background-size: auto 100%;
-  background-position: 70%;
+  animation: show 2s ease-out;
+  background-size: 100% 100%;
+  background-position: center;
   position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
 
   & > .login-box {
-    width: 350px;
+    width: 420px;
+    height: 577.25px;
     border-radius: 10px;
-    background: var(--primary-color-blue);
-    position: absolute;
-    right: 200px;
-    top: 200px;
-    animation: login-box 2s ease-in-out;
-    padding: 30px;
+    background: transparent;
+    background-image: url("../../assets/svg/bookMark.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    animation: login-box 1s ease-out;
+    padding-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    position: relative;
+    margin-bottom: 60px;
 
-    & > .title {
-      font-size: 30px;
-      font-weight: 500;
+    & > h1 {
+      font-weight: 600;
+      font-size: 32px;
+      line-height: 48px;
+      /* identical to box height */
+      text-align: center;
+      color: #0d6d75;
+    }
+
+    & > h2 {
+      font-style: italic;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 21px;
+      /* identical to box height */
+
+      text-align: center;
+
+      color: #8f9899;
+    }
+
+    & > .logo {
+      width: 139px;
+      height: 158px;
     }
 
     & > .message {
       width: 100%;
-      padding: 10px;
-      background: var(--red-color);
+      height: 50px;
+      background: #e73565;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0;
+
+      & > .error-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        & > p {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 23px;
+          color: #ffffff;
+          margin: 0;
+        }
+      }
+
+      & > .icon {
+        margin: 0 15px;
+      }
     }
 
-    & > input {
+    & > .form-input {
       width: 100%;
-      outline: none;
-      border: none;
-      padding: 5px 10px;
+      height: 50px;
       border-radius: 10px;
-      margin: 10px 0;
+      background: rgba(38, 144, 91, 0.08);
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all 0.2s ease-in-out;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin: 10px 0px;
+      border: 1px solid transparent;
+
+      &:focus-within {
+        border: 1px solid #027b76;
+      }
+
+      & > input {
+        flex-grow: 1;
+        outline: none;
+        border: none;
+        padding: 5px 15px;
+        background: transparent;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 27px;
+        color: #0d6d75;
+      }
+
+      & > .btn-right {
+        width: 30px;
+        height: 30px;
+        border: none;        
+        background: transparent;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 24px;
+        margin-right: 10px;
+      }
     }
 
-    & > button {
-      width: 100%;
-      padding: 10px;
-      background: var(--primary-color-orange);
-      color: var(--white-color);
-      font-size: 18px;
-      font-weight: 500;
-      outline: none;
+    & > .submit {
+      position: absolute;
+      bottom: -42px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.25);
       border: none;
-      border-radius: 10px;
-      margin-top: 10px;
 
-      &:disabled{
-        background: var(--text-gray100-color-90);
+      & > .loader {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+      }
+
+      &:disabled {
+        background: #a4a4a4;
+      }
+
+      &:enabled {
+        background: #f9b700;
+        &:hover {
+          background: #eeaf00;
+        }
+        &:active {
+          background: #e1aa00;
+        }
       }
     }
   }

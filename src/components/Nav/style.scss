@@ -1,0 +1,58 @@
+.bee-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 76px;
+  float: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #11364c;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
+  z-index: 1038;
+  padding: 0px 20px;
+
+  & .icon {
+    width: 24px;
+    height: 24px;
+    fill: #e0e0e0;
+    vertical-align: unset;
+    margin: 9px;
+  }
+
+  & > .items-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  & button {
+    background-color: transparent;
+    color: #e0e0e0;
+    border: none;
+    margin: 0px 5px;
+    max-height: 42px;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+
+    &.logout-btn {
+      padding-left: 14px;
+      padding-right: 5px;
+    }
+
+    &:hover {
+      background: rgba(249, 183, 0, 0.1);
+      color: white;
+      & > .icon {
+        fill: white;
+      }
+    }
+  }
+}

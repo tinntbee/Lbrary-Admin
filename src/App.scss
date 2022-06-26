@@ -1,0 +1,184 @@
+:root {
+  --primary-color-orange: #f9b700;
+  --primary-color-blue: #185f74;
+  --base-gray-color: #e8e8e8;
+  --text-gray50-color: #b5b5b5;
+  --text-gray100-color: #9b9b9b;
+  --text-gray100-color-90: #9b9b9bf6;
+  --base-gray-color-90: #e8e8e8f5;
+  --gray-color: #929292;
+  --white-color: #ffffff;
+  --small-font-size-14px: 1rem;
+  --text-black-color: #545454;
+  --red-color: #f95500;
+  --black-background-55: rgba(84, 84, 84, 0.55);
+  --background-green: #6fcf97;
+  --background-red: #eb5757;
+  --background-yellow: #f2c94c;
+  --background-blue: #56ccf2;
+}
+
+.bee-main-container {
+  width: 100%;
+  height: 100vh;
+  background-image: url("assets/png/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+
+  & > .bee-main-content {
+    margin-top: 76px;
+    margin-left: 76px;
+    width: calc(100% - 76px);
+    height: calc(100% - 76px);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    & > .content {
+      padding: 20px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 17px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+      border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      border: 5px solid transparent;
+      background-clip: content-box;
+      background-color: rgba(224, 224, 224, 0.5);
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background-color: rgba(224, 224, 224, 0.7);
+      }
+
+      &:active {
+        background-color: rgba(224, 224, 224, 1);
+      }
+    }
+  }
+}
+
+.bee-scroll {
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 17px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: 5px solid transparent;
+    background-clip: content-box;
+    background-color: rgba(224, 224, 224, 0.5);
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background-color: rgba(224, 224, 224, 0.7);
+    }
+
+    &:active {
+      background-color: rgba(224, 224, 224, 1);
+    }
+  }
+}
+
+.bee-btn {
+  background-color: transparent;
+  color: #e0e0e0;
+  border: none;
+  max-height: 42px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(249, 183, 0, 0.1);
+    color: white;
+
+    & > .icon {
+      fill: white;
+    }
+  }
+  & > .icon {
+    margin: 5px;
+  }
+}
+
+.bee-card {
+  background: rgba(17, 54, 76, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+
+  & > .bee-card-header {
+    min-height: 50px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > .bee-card-title {
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 29px;
+      color: #e0e0e0;
+    }
+
+    & > .bee-card-actions {
+      margin-left: auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  & > .bee-card-body {
+    padding: 10px;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.icon {
+  fill: white;
+  width: 24px;
+  height: 24px;
+}
+
+.bg-green {
+  background: var(--background-green);
+}
+.bg-red {
+  background: var(--background-red);
+}
+.bg-yellow {
+  background: var(--background-yellow);
+}
+.bg-blue {
+  background: var(--background-blue);
+}

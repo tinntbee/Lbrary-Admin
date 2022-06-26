@@ -130,7 +130,7 @@ function CategoriesAndTagsFeature(props) {
     fetchCategories();
   }, []);
   return (
-    <div className="content-wrapper">
+    <div className="content">
       <TagDetail
         _id={tagCurrent._id}
         index={tagCurrent.index}

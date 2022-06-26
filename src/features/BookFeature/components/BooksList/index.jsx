@@ -63,11 +63,11 @@ function BooksList(props) {
     fetchBooks();
   }, []);
 
-  useEffect(() => {
-    if (books.length > 0) {
-      window.rawTable();
-    }
-  }, [books]);
+  // useEffect(() => {
+  //   if (books.length > 0) {
+  //     window.rawTable();
+  //   }
+  // }, [books]);
   return (
     <>
       <div className="content-header">
