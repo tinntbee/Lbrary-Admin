@@ -1,0 +1,187 @@
+.user-detail-container {
+  width: 410px;
+  height: fit-content;
+
+  &.hidden {
+    display: none;
+  }
+
+  & > .bee-card-header {
+    & .bee-btn {
+      padding: 0;
+    }
+  }
+
+  & > .bee-card-body {
+    & > .user-information {
+      padding: 0px 5px;
+      & .section {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+      }
+      & > .intro-section {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        & > .avatar {
+          width: 133px;
+          height: 133px;
+          border: 2px solid #ffffff;
+          border-radius: 20px;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        & > .intro {
+          gap: 2px;
+          flex-grow: 1;
+          padding-left: 10px;
+          padding-right: 10px;
+          & > .name {
+            font-weight: 700;
+            font-size: 20px;
+            color: #ffffff;
+          }
+          & > .email {
+            font-weight: 300;
+            font-size: 14px;
+            color: #ffffff;
+          }
+          & > .tag {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            border-radius: 8px;
+            padding: 5px;
+            border: 1px solid #ffffff;
+            align-items: center;
+            margin: 5px 0;
+            width: fit-content;
+
+            &.status {
+              font-weight: 700;
+              font-size: 12px;
+              color: #ffffff;
+              & > .icon {
+                width: 18px;
+                height: 18px;
+              }
+            }
+
+            &.flower {
+              font-weight: 700;
+              font-size: 12px;
+              color: #000000;
+              & > .icon {
+                width: 18px;
+                height: 18px;
+                fill: #000000;
+              }
+              & > span {
+                font-weight: 300;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+      & > .bee-scroll {
+        min-height: 300px;
+        max-height: calc(100vh - 340px);
+        border-radius: 20px;
+
+        & > .more-section {
+          & > .detail-section {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            & > .detail-row {
+              display: flex;
+              flex-direction: row;
+              align-items: flex-start;
+              & > .icon {
+                fill: #e0e0e0;
+              }
+              & > span {
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
+                color: #e0e0e0;
+                margin-left: 10px;
+              }
+            }
+          }
+          & > .bookcase-section {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            & > div > .title {
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 21px;
+              color: #e0e0e0;
+              margin-bottom: 10px;
+            }
+            & > .tag-favorites > .bee-scroll {
+              width: 100%;
+              overflow: auto;
+              border-radius: 10px;
+              & > .tags {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                & > .tag {
+                  background: #f9b700;
+                  border-radius: 10px;
+                  padding: 10px;
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 21px;
+                  color: #ffffff;
+                  white-space: nowrap;
+                }
+              }
+            }
+            & > .bookcase > .bee-scroll {
+              width: 100%;
+              overflow: auto;
+              border-radius: 10px;
+              & > .books {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                & > .book {
+                  min-width: 86px;
+                  height: 137px;
+                  border-radius: 10px;
+                  background-position: center;
+                  background-repeat: no-repeat;
+                  background-size: cover;
+                }
+              }
+            }
+          }
+          & > .pomodoro-section {
+            height: 275px;
+          }
+        }
+      }
+    }
+  }
+
+  & > .bee-card-footer {
+    & > .actions {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      & > button {
+        flex-grow: 1;
+        flex-basis: 0;
+      }
+    }
+  }
+}

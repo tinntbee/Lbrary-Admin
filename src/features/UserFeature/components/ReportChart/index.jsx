@@ -13,8 +13,8 @@ import {
   Legend,
 } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import UserByFaculty from "./UserByFaculty";
-import UserByMonth from "./UserByMonth";
+import UserByFaculty from "./UserByFaculty/UserByFaculty";
+import UserByMonth from "./UserByMonth/UserByMonth";
 
 
 function ReportChart(props) {
