@@ -33,18 +33,26 @@ function Sidebar(props) {
       });
     });
     setListTabs([...newTabs]);
-  }, [location]);
+  }, [location.pathname]);
   useEffect(() => {
+    let unmounted = false;
     adminAPI
       .reSign()
       .then((res) => {
-        setAdmin(res.admin);
+        if (!unmounted) {
+          setAdmin(res.admin);
+        }
       })
       .catch((error) => {
-        if (error.response && error.response.status === 403) {
-          history.replace("/login");
+        if (!unmounted) {
+          if (error.response && error.response.status === 403) {
+            history.replace("/login");
+          }
         }
       });
+    return () => {
+      unmounted = true;
+    };
   }, []);
   return (
     <aside>

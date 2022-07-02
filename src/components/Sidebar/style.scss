@@ -10,7 +10,7 @@ aside {
   overflow-y: hidden;
   z-index: 1038;
   transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
-  width: 76px;
+  width: 76px!important;
   overflow-x: hidden;
 
   & p {
@@ -19,7 +19,7 @@ aside {
   }
 
   &:hover {
-    width: 230px;
+    width: 230px!important;
     & > .sidebar {
       & > .user-container {
         & > .info {

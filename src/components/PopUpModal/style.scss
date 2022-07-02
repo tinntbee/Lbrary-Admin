@@ -1,0 +1,50 @@
+.pop-up-modal-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transform: scale(0);
+  z-index: 2;
+
+  &.show {
+    transform: scale(1);
+
+    & > .modal-background {
+      // background: rgba(0, 0, 0, 0);
+      animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+      & > .bee-modal {
+        opacity: 0;
+        animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      }
+    }
+
+    &.out {
+      animation: quickScaleDown 0s 0.5s linear forwards;
+
+      & > .modal-background {
+        animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+        & > .bee-modal {
+          animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+      }
+    }
+  }
+
+  .modal-background {
+    width: calc(100% - 76px);
+    height: calc(100% - 76px);
+    margin-left: 76px;
+    margin-top: 76px;
+    background: rgba(0, 0, 0, 0.3);
+
+    & > .bee-modal {
+      margin:auto
+    }
+  }
+}

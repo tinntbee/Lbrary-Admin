@@ -1,0 +1,30 @@
+.search-input {
+  background: #f7f7f7;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  & .icon {
+    width: 18px;
+    height: 18px;
+    &.search-icon {
+      fill: #6d6d6d;
+      margin: 5px;
+    }
+  }
+  & > .bee-btn {
+    padding: 0;
+  }
+  & > input {
+    flex-grow: 1;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #6d6d6d;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    margin-right: 0 5px;
+  }
+}
