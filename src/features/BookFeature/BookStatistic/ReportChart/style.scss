@@ -1,0 +1,23 @@
+.report-chart-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  & > .hot-trending-section {
+    flex-grow: 4;
+    flex-basis: 0;
+  }
+  & > .report-by-tag-section {
+    flex-grow: 3;
+    flex-basis: 0;
+  }
+  & > .profit-by-tag-section {
+    flex-grow: 3;
+    flex-basis: 0;
+  }
+  & > .report-profit-section {
+    flex-grow: 3;
+    flex-basis: 1;
+    min-width: 50%;
+  }
+}

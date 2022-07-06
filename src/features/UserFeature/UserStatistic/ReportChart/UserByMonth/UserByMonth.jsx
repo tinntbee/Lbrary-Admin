@@ -152,7 +152,7 @@ function UserByMonth(props) {
   return (
     <div className="bee-card bee-card-user-by-month">
       <div className="bee-card-header">
-        <h3 className="bee-card-title">THỐNG KÊ NGƯỜI DÙNG MỚI THEO THÁNG </h3>
+        <h3 className="bee-card-title">THỐNG KÊ NGƯỜI DÙNG MỚI</h3>
         <div className="bee-card-tools"></div>
       </div>
       <div className="bee-card-body">

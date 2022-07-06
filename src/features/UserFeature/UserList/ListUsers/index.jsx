@@ -122,7 +122,12 @@ function ListUsers(props) {
 
   React.useEffect(() => {
     var newFilteredUsers = users.filter((user) => {
-      return user.name.toLowerCase().includes(filter);
+      return (
+        user.name.toLowerCase().includes(filter) ||
+        user.nickname.toLowerCase().includes(filter) ||
+        user.email.toLowerCase().includes(filter) ||
+        user.faculty.toLowerCase() === filter
+      );
     });
     setFilteredUsers([...newFilteredUsers]);
   }, [users, filter]);
@@ -155,7 +160,7 @@ function ListUsers(props) {
     return <SearchInput handleFilter={handleFilter} />;
   }, [resetPaginationToggle]);
   return (
-    <div className="bee-card list-users-container">
+    <div className="bee-card list-users-container table-data-card">
       <div className="bee-card-body">
         <DataTable
           title="DANH SÁCH NGƯỜI DÙNG"

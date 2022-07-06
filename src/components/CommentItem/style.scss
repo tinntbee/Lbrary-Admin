@@ -1,0 +1,80 @@
+.comment-item {
+  width: 100%;
+  padding: 7px;
+  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  &.hidden {
+    & :not(.bee-btn) {
+      opacity: 0.8;
+    }
+  }
+  & > .header {
+    width: 100%;
+    align-items: center;
+    gap: 7px;
+    & > .avatar-section {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    & > .user-info-section {
+      flex-grow: 1;
+      gap: 2px;
+      & > .name {
+        font-weight: 700;
+        font-size: 14px;
+        color: #ffffff;
+      }
+      & > .email {
+        font-style: italic;
+        font-weight: 300;
+        font-size: 12px;
+        color: #ffffff;
+      }
+    }
+    & > .react-section {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      & > .icon {
+        width: 18px;
+        height: 18px;
+      }
+      &.like {
+        & > .icon {
+          fill: #f9b700;
+        }
+      }
+      &.dislike {
+        & > .icon {
+          fill: #eb5757;
+        }
+      }
+    }
+  }
+  & > .content {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: #e0e0e0;
+  }
+  & > .bee-btn {
+    position: absolute;
+    right: 0;
+    bottom: -10px;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 5px 8px;
+    &.yellow {
+      color: #333333;
+    }
+  }
+}

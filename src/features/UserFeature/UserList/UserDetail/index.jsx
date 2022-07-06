@@ -7,11 +7,8 @@ import PersonIcon from "../../../../components/Icon/PersonIcon";
 import PersonInfoIcon from "../../../../components/Icon/PersonInfoIcon";
 import CalendarIcon from "../../../../components/Icon/CalendarIcon";
 import BriefcaseIcon from "../../../../components/Icon/BriefcaseIcon";
-import SymbolIcon from "../../../../components/Icon/SymbolIcon";
 import PersonModifyIcon from "../../../../components/Icon/PersonModify";
 import LockIcon from "../../../../components/Icon/LockIcon";
-import adminAPI from "../../../../api/adminAPI";
-import { useSnackbar } from "notistack";
 import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
 import UnlockIcon from "../../../../components/Icon/UnlockIcon";
 import UserModifyModal from "../UserModifyModal";
@@ -19,9 +16,8 @@ import UserModifyModal from "../UserModifyModal";
 UserDetail.propTypes = {};
 
 function UserDetail(props) {
-  const { user, show, handleHide, pending, handleBanUser } = props;
+  const { user, show, handleHide, pending, handleBanUser, handleModifyUser } = props;
   const [showModal, setShowModal] = React.useState(false);
-  console.log({ user });
   return (
     <div
       className={
@@ -185,7 +181,7 @@ function UserDetail(props) {
           )}
         </div>
       </div>
-      <UserModifyModal show={showModal} user={user} setShow={setShowModal} />
+      <UserModifyModal show={showModal} user={user} setShow={setShowModal} handleModifyUser={handleModifyUser}/>
     </div>
   );
 }

@@ -84,6 +84,35 @@ function UserList(props) {
         setUsersPending(false);
       });
   }
+  function handleModifyUser(_user) {
+    console.log({ _user });
+    var newUsers = [...users];
+    var index = newUsers.findIndex((e) => e._id === _user._id);
+    if (index) {
+      newUsers[index] = {
+        ...newUsers[index],
+        name: _user.name,
+        nickname: _user.nickname,
+        email: _user.email,
+        faculty: _user.faculty,
+        gender: _user.gender,
+        dob: _user.dob,
+      };
+      setUsers([...newUsers]);
+    }
+
+    if (user._id === _user._id) {
+      setUser({
+        ...user,
+        name: _user.name,
+        nickname: _user.nickname,
+        email: _user.email,
+        faculty: _user.faculty,
+        gender: _user.gender,
+        dob: _user.dob,
+      });
+    }
+  }
   React.useEffect(() => {
     fetchUsers();
   }, []);
@@ -101,6 +130,7 @@ function UserList(props) {
         pending={userPending}
         handleBanUser={handleBanUser}
         handleHide={() => setShowUserDetail(false)}
+        handleModifyUser={handleModifyUser}
       />
     </div>
   );

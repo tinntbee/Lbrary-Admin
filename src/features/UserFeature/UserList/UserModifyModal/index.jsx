@@ -12,11 +12,13 @@ import InputField from "../../../../components/InputField";
 import SelectField from "../../../../components/SelectField";
 import { facultyOptions } from "../../../../utils/fakeData";
 import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+import adminAPI from "../../../../api/adminAPI";
+import { useSnackbar } from "notistack";
 
 UserModifyModal.propTypes = {};
 
 function UserModifyModal(props) {
-  const { show, setShow, user } = props;
+  const { show, setShow, user, handleModifyUser } = props;
   const classes = useStyles();
   const genders = sexOptions;
   const faculties = facultyOptions;
@@ -45,12 +47,41 @@ function UserModifyModal(props) {
     },
   });
 
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [pending, setPending] = React.useState(true);
 
   function submitModifyUser(values) {
     setPending(true);
-    values = { ...values };
-    alert(JSON.stringify(values, null, 2));
+    adminAPI
+      .modifyUser(values)
+      .then((res) => {
+        handleModifyUser(res);
+        setPending(false);
+        enqueueSnackbar("Lưu các thay đổi thành công!", {
+          variant: "success",
+        });
+        setShow(false);
+      })
+      .catch((error) => {
+        setPending(false);
+        switch (error.response.status) {
+          case 403:
+            enqueueSnackbar("Tài khoản email đã tồn tại!", {
+              variant: "error",
+            });
+            break;
+          case 404:
+            enqueueSnackbar("Không tìm thấy người dùng!", {
+              variant: "error",
+            });
+            break;
+          default:
+            enqueueSnackbar("Lưu thất bại!", {
+              variant: "error",
+            });
+            break;
+        }
+      });
   }
 
   React.useEffect(() => {

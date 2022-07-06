@@ -15,11 +15,13 @@
   }
 
   & > .bee-card-body {
+    position: relative;
     & > .list-users-section {
       width: 100%;
       height: 400px;
       display: flex;
       flex-direction: column;
+      
       & > .grid-table-header {
         display: grid;
         grid-template-columns: 40px 160px 80px 120px 300px 85px 100%;
@@ -29,7 +31,6 @@
         line-height: 20px;
         color: #ffffff;
         padding: 15px 5px;
-
       }
       & > .grid-table-body {
         flex-grow: 1;
@@ -41,15 +42,15 @@
         line-height: 23px;
         color: #ffffff;
         overflow: auto;
-        & > div{
-            padding: 15px 5px;
-            overflow-wrap: break-word;
-            &.center{
-                text-align: center;
-            }
-            &.fill{
-                background: rgba(0, 0, 0, 0.3);
-            }
+        & > div {
+          padding: 15px 5px;
+          overflow-wrap: break-word;
+          &.center {
+            text-align: center;
+          }
+          &.fill {
+            background: rgba(0, 0, 0, 0.3);
+          }
         }
       }
     }

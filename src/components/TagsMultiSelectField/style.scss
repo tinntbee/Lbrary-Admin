@@ -1,0 +1,137 @@
+.tags-multi-select-field {
+  width: 100%;
+  border: 0;
+  margin: 0;
+  display: inline-flex;
+  padding: 0;
+  position: relative;
+  min-width: 0;
+  flex-direction: column;
+  vertical-align: top;
+  & > label {
+    color: rgba(255, 255, 255, 0.7);
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+    padding: 0px;
+    display: block;
+    transform-origin: left top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(133% - 24px);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    transform: translate(14px, -9px) scale(0.75);
+    transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms,
+      transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms,
+      max-width 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    z-index: 1;
+    pointer-events: auto;
+    user-select: none;
+  }
+  &__container {
+    width: 100%;
+    position: relative;
+    border-radius: 4px;
+    & > .tags-content {
+      padding: 18.5px 14px;
+      padding-top: 20px;
+      padding-bottom: 10.5px;
+      & > .values {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+        & > span {
+          background: #f9b700;
+          border-radius: 5px;
+          padding: 5px;
+          color: #333333;
+        }
+      }
+      & > .tags {
+        max-height: 150px;
+        margin-top: 15px;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        & > .bee-check {
+          padding: 10px;
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          min-width: fit-content;
+          border-radius: 5px;
+          &.checked {
+            background: rgba(249, 183, 0, 0.1);
+          }
+          & > input {
+            cursor: pointer;
+            position: relative;
+            &::after {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              z-index: 0;
+              content: "";
+              width: 20px;
+              height: 20px;
+              background: rgba(255, 255, 255, 1);
+              border: 1px solid #ffffff;
+              border-radius: 5px;
+              transition: all 0.3s ease-in-out;
+            }
+            &:checked {
+              &::after {
+                background: #f9b700;
+              }
+            }
+          }
+          & > label {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    & > .notched-outline {
+      top: -5px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      padding: 0 8px;
+      overflow: hidden;
+      position: absolute;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: inherit;
+      pointer-events: none;
+      border-color: #e0e0e0;
+      & > legend {
+        float: unset;
+        overflow: hidden;
+        display: block;
+        width: auto;
+        padding: 0;
+        height: 11px;
+        visibility: hidden;
+        max-width: 100%;
+        -webkit-transition: max-width 100ms cubic-bezier(0, 0, 0.2, 1) 50ms;
+        transition: max-width 100ms cubic-bezier(0, 0, 0.2, 1) 50ms;
+        white-space: nowrap;
+        & > span {
+          display: inline-block;
+          opacity: 0;
+          visibility: visible;
+        }
+      }
+    }
+  }
+}

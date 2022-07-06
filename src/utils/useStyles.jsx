@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiSelect-select": {
       color: "white",
     },
+    "& .MuiInputBase-multiline": {
+      color: "white",
+    },
     "& .MuiSelect-icon": {
       fill: "#E0E0E0",
     },

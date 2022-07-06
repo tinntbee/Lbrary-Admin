@@ -33,18 +33,18 @@ function Header(props) {
   }, []);
   return (
     <div className="user-header">
-      <div className="box new-users-box">
-        <span className="icon-container">
+      <div className="box">
+        <span className="icon-container bg-green">
           <AddPersonIcon />
         </span>
         <div className="content">
-          <p className="title">Người dùng mới</p>
+          <p className="title">Người dùng</p>
           <p className="value">{data.totalNewUsers}</p>
         </div>
       </div>
 
-      <div className="box react-forum-box">
-        <span className="icon-container">
+      <div className="box">
+        <span className="icon-container bg-red">
           <SmileFaceIcon />
         </span>
         <div className="content">
@@ -53,8 +53,8 @@ function Header(props) {
         </div>
       </div>
 
-      <div className="box hour-pomodoro-box">
-        <span className="icon-container">
+      <div className="box">
+        <span className="icon-container bg-blue">
           <TimeIcon />
         </span>
         <div className="content">
@@ -63,8 +63,8 @@ function Header(props) {
         </div>
       </div>
 
-      <div className="box created-flowers-box">
-        <span className="icon-container">
+      <div className="box ">
+        <span className="icon-container bg-yellow">
           <FlowerIcon />
         </span>
         <div className="content">

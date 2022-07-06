@@ -20,13 +20,23 @@ InputField.defaultProp = {
 };
 
 function InputField(props) {
-  const { field, form, type, label, disabled, placeholder } = props;
+  const {
+    field,
+    form,
+    type,
+    label,
+    disabled,
+    multiline,
+    placeholder,
+    inputProps,
+    fields,
+  } = props;
   const { name } = field;
   const { errors, touched } = form;
   const error = touched[name] && errors[name];
   return (
     <TextField
-      inputProps={{ style: { fontSize: 16 } }} // font size of input text
+      inputProps={{ ...{ style: { fontSize: 16 } }, ...inputProps }} // font size of input text
       InputLabelProps={{ style: { fontSize: 16 } }} // font size of input label
       variant="outlined"
       size="small"
@@ -40,6 +50,8 @@ function InputField(props) {
       form={form}
       error={error}
       helperText={error}
+      multiline={multiline}
+      {...fields}
     />
   );
 }

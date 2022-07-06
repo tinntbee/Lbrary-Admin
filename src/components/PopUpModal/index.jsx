@@ -6,10 +6,22 @@ PopUpModal.propTypes = {};
 
 function PopUpModal(props) {
   const { show } = props;
+  const [oldShow, setOldShow] = React.useState(false);
+  React.useEffect(() => {
+    if (!(show || oldShow)) {
+      setOldShow(false);
+    } else {
+      setOldShow(true);
+    }
+  }, [show]);
   return (
     <div
       className={
-        show ? "pop-up-modal-container show" : "pop-up-modal-container show out"
+        show
+          ? "pop-up-modal-container show"
+          : oldShow
+          ? "pop-up-modal-container show out"
+          : "pop-up-modal-container"
       }
     >
       <div className="modal-background bee-scroll">

@@ -35,6 +35,10 @@ const adminAPI = {
     const url = "/admin/putBook/" + _id;
     return axiosClient.put(url, book);
   },
+  postBook: (formData) => {
+    const url = "/admin/postBook";
+    return axiosClient.post(url, formData);
+  },
   banBook: ({ _id, is_active }) => {
     const url = "/admin/banBook/" + _id;
     return axiosClient.put(url, { is_active });
@@ -63,7 +67,10 @@ const adminAPI = {
     const url = "/admin/banUser/" + _id;
     return axiosClient.put(url, { is_banned });
   },
-
+  modifyUser: (user) => {
+    const url = "/admin/modifyUser";
+    return axiosClient.put(url, user);
+  },
   //NOTE: Tag manage
   getAllTagsManage: () => {
     const url = "/admin/getAllTagsManage";

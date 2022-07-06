@@ -1,4 +1,5 @@
 @import "./scss/animations.scss";
+@import "./scss/styleTableData.scss";
 
 :root {
   --primary-color-orange: #f9b700;
@@ -182,7 +183,7 @@
 }
 
 .bee-card {
-  background: rgba(17, 54, 76, 0.5);
+  background: rgba(17, 54, 76, 0.6);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
 
@@ -193,10 +194,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-
-    &.bg-green-50 {
-      background: rgba(17, 54, 76, 0.5);
-    }
 
     & > .bee-card-title {
       font-weight: 600;
@@ -210,7 +207,6 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-     
     }
   }
 
@@ -272,4 +268,167 @@
 }
 .bg-blue {
   background: var(--background-blue);
+}
+.bg-orange {
+  background: #f2994a;
+}
+.bg-light-green {
+  background-color: rgba(111, 207, 151, 1);
+}
+.bg-light-red {
+  background-color: rgba(235, 87, 87, 1);
+}
+.bg-light-blue {
+  background-color: rgba(86, 204, 242, 1);
+}
+.bg-light-yellow {
+  background-color: rgba(242, 201, 76, 1);
+}
+.bg-green-50 {
+  background: rgba(17, 54, 76, 0.5);
+}
+
+.box {
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 305px;
+  height: 100px;
+  background: rgba(17, 54, 76, 0.8);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+
+  & > .icon-container {
+    width: 62px;
+    height: 62px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+
+    & > .icon {
+      width: 34px;
+      height: 34px;
+      fill: white;
+    }
+  }
+
+  & > .content {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    & > .title {
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 23px;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    & > .value {
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 35px;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.box-m {
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 305px;
+  height: 100px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+
+  & > .content {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    & > .title {
+      font-weight: 300;
+      font-size: 18px;
+      color: #ffffff;
+    }
+
+    & > .value {
+      font-weight: 800;
+      font-size: 32px;
+      color: #ffffff;
+    }
+  }
+
+  & > .icon-container {
+    margin-left: auto;
+    opacity: 0.5;
+    & > .icon {
+      width: 65px;
+      height: 65px;
+    }
+  }
+}
+
+.badge {
+  width: fit-content;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  &.m {
+    font-weight: 400;
+    font-size: 12px;
+  }
+  & > .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  &.bg-green {
+    background: #027b76;
+  }
+
+  &.txt-yellow {
+    font-size: unset;
+    color: #f9b700;
+    & > .icon {
+      fill: #f9b700;
+    }
+    background: transparent;
+  }
+
+  &.bg-blue {
+    background: #1aa0bc;
+    color: white;
+  }
+
+  &.bg-yellow {
+    background: #f9b700;
+    color: #333333;
+    & > .icon {
+      fill: #333333;
+    }
+  }
+
+  &.bg-red {
+    background: #eb5757;
+  }
 }

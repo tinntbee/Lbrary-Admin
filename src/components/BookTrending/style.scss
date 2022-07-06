@@ -1,0 +1,54 @@
+.book-trending {
+  min-height: 140px;
+  min-width: 300px;
+  flex-grow: 1;
+  flex-wrap: nowrap;
+  border-radius: 10px;
+  & > .image-section {
+    min-height: 137px;
+    min-width: 86px;
+    max-width: 86px;
+    border: 1px solid #ffffff;
+    filter: drop-shadow(0px 12px 16px rgba(0, 0, 0, 0.25));
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  & > .detail-section {
+    flex-grow: 1;
+    overflow: hidden;
+    padding: 10px 0;
+    & > .name {
+      font-weight: 600;
+      font-size: 16px;
+      color: #ffffff;
+    }
+    & > .author {
+      font-weight: 400;
+      font-size: 12px;
+      color: #ffffff;
+      opacity: 0.7;
+      margin-top: 3px;
+    }
+    & > .rates {
+      margin-top: 14px;
+      gap: 10px;
+      & > .col {
+        align-items: center;
+        gap: 0;
+        & > .value {
+          font-weight: 400;
+          font-size: 12px;
+          text-align: center;
+          color: #ffffff;
+          opacity: 0.89;
+        }
+        & > .icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}

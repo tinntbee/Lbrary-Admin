@@ -1,10 +1,13 @@
 import React from "react";
+import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
 import UploadIcon from "../../../../components/Icon/UploadIcon";
+import sleep from "../../../../utils/sleep";
 import "./style.scss";
 
 function AddMultiUser(props) {
   const importFileRef = React.useRef();
   const { className } = props;
+  const [pending, setPending] = React.useState(false);
   const [file, setFile] = React.useState({});
   const [users, setUsers] = React.useState([]);
   const [message, setMessage] = React.useState(
@@ -13,14 +16,14 @@ function AddMultiUser(props) {
       <b>50</b> đang chờ){" "}
     </p>
   );
-  function importFileOnChange(e) {
-    console.log({ file: e.target.files[0] });
+  async function importFileOnChange(e) {
+    setPending(true);
     setFile(e.target.files[0]);
     const reader = new FileReader();
+    var result = [];
     reader.onload = function (e) {
       var csv = reader.result;
       var lines = csv.replaceAll("\r", "").split("\n");
-      var result = [];
       var headers;
       headers = lines[0].split(",");
       for (var i = 1; i < lines.length; i++) {
@@ -34,13 +37,16 @@ function AddMultiUser(props) {
         }
         result.push({ ...obj, status: "wait" });
       }
-      setUsers(result);
     };
     reader.readAsText(e.target.files[0]);
+    await sleep(1000);
+    setPending(false);
+    setUsers(result);
   }
   function handleReset() {
     importFileRef.current.value = null;
     setFile({});
+    setUsers([]);
   }
   return (
     <div className={"bee-card add-multi-user-container " + className}>
@@ -101,6 +107,7 @@ function AddMultiUser(props) {
             })}
           </div>
         </div>
+        {pending && <LoadingAnimationIcon className="absolute" />}
       </div>
       <div className="bee-card-footer border-line-top">
         <div className="left">{message}</div>

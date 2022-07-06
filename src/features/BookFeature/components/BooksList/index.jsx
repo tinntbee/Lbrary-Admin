@@ -54,6 +54,7 @@ function BooksList(props) {
       .getAllBook()
       .then((res) => {
         setBooks(res);
+        console.log({ res });
       })
       .catch((err) => {
         console.log({ err });
