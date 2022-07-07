@@ -39,6 +39,10 @@ const adminAPI = {
     const url = "/admin/postBook";
     return axiosClient.post(url, formData);
   },
+  checkExistBookName: ({ name }) => {
+    const url = "/admin/checkExistBookName";
+    return axiosClient.post(url, { name });
+  },
   banBook: ({ _id, is_active }) => {
     const url = "/admin/banBook/" + _id;
     return axiosClient.put(url, { is_active });

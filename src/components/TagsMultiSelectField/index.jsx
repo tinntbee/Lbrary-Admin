@@ -79,7 +79,7 @@ function TagsMultiSelectField(props) {
               })}
           </div>
         </div>
-        <fieldset aria-hidden="true" class="notched-outline">
+        <fieldset aria-hidden="true" className="notched-outline">
           <legend>
             <span>{label}</span>
           </legend>

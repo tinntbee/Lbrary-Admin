@@ -12,15 +12,33 @@ import TagsMultiSelectField from "../../../../components/TagsMultiSelectField";
 import { useSnackbar } from "notistack";
 import adminAPI from "../../../../api/adminAPI";
 
+import FroalaEditor from "react-froala-wysiwyg";
+
+// Require Editor JS files.
+import "froala-editor/js/plugins.pkgd.min.js";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+// import "froala-editor/js/plugins/fullscreen.min.js"
+
+// Require Editor CSS files.
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+import "froala-editor/css/third_party/embedly.min.css";
+import { filesService } from "../../../../services/filesService";
+import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+
 AddOneBook.propTypes = {};
 
 function AddOneBook(props) {
+  const thumbnailRef = React.useRef();
+  const pdfRef = React.useRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [pending, setPending] = React.useState(false);
   const [thumbnail, setThumbnail] = React.useState({
     // file: undefined,
     // url: "",
   });
   const [pdf, setPdf] = React.useState({
+    // requirePassword: false,
     // file: undefined,
     // url: "https://firebasestorage.googleapis.com/v0/b/library-online-3ec9d.appspot.com/o/books%2Fpdf%2FTin%20Nguyen%20Trung%20-%20CV%20Fresher%20Front-end%20Software%20Engineer%20-%C4%91%C3%A3%20b%E1%BA%A3o%20v%E1%BB%87-ver1641915725851.pdf?alt=media&token=25f5c6fb-7b51-46d7-b181-b7ae4aabc59b",
   });
@@ -33,75 +51,72 @@ function AddOneBook(props) {
   // const handleRemoveThumbnail = () => {
   //   setThumbnail();
   // };
-  const handleTPdfChange = (e) => {
+  const handlePdfChange = (e) => {
     var file = e.target.files[0];
     var url = URL.createObjectURL(file);
     setPdf({ ...thumbnail, url: url, file: file, key: "" });
     return () => URL.revokeObjectURL(url);
+  };
+  const handleRequestPasswordAndPages = (required, pages, _) => {
+    setPdf({ ...pdf, pages, requirePassword: required });
   };
   const [book, setBook] = React.useState({
     name: "",
     author: "",
     quote: "",
     description: "",
-    price: "",
+    price: 0,
     key: "",
     tags: [],
   });
-  const [selectedTags, setSelectedTags] = React.useState([
-    {
-      _id: "1",
-      name: "KHOA HỌC",
-    },
-  ]);
-  const [tags, setTags] = React.useState([
-    {
-      _id: "1",
-      name: "KHOA HỌC",
-    },
-    {
-      _id: "2",
-      name: "VĂN HỌC",
-    },
-    {
-      _id: "3",
-      name: "KHOA HỌC",
-    },
-    {
-      _id: "4",
-      name: "VĂN HỌC",
-    },
-    {
-      _id: "5",
-      name: "KHOA HỌC",
-    },
-    {
-      _id: "6",
-      name: "VĂN HỌC VĂN HỌC",
-    },
-    {
-      _id: "7",
-      name: "KHOA HỌC",
-    },
-    {
-      _id: "8",
-      name: "VĂN HỌC",
-    },
-    {
-      _id: "9",
-      name: "KHOA HỌC",
-    },
-    {
-      _id: "10",
-      name: "VĂN HỌC",
-    },
-  ]);
+  const [selectedTags, setSelectedTags] = React.useState([]);
+  const [tags, setTags] = React.useState([]);
+
+  const fetchAllTags = async () => {
+    adminAPI
+      .getAllTags()
+      .then((res) => {
+        setTags(res);
+        // if (res && res.length > 0) {
+        //   setSelectedTags([res[0]]);
+        // }
+      })
+      .catch((err) => {
+        console.log({ err });
+        enqueueSnackbar(`Tải danh thẻ sách thất bại!`, {
+          variant: "warning",
+        });
+      });
+  };
+
+  React.useEffect(() => {
+    fetchAllTags();
+  }, []);
+
   const FORM_VALIDATION = yup.object().shape({
-    name: yup.string("Tên Sách").required("Tên sách là trường bắt buộc").trim(),
+    name: yup
+      .string("Tên Sách")
+      .required("Tên sách là trường bắt buộc")
+      .trim()
+      .test("Exist Book Check", "Tên sách đã tồn tại", (value) => {
+        if (value) {
+          return adminAPI
+            .checkExistBookName({ name: value })
+            .then(() => true)
+            .catch((error) => {
+              if (error.response.status === 406) {
+                return false;
+              }
+              return true;
+            });
+        } else {
+          return true;
+        }
+      }),
     author: yup.string("Tác Giả").required("Tác giả là trường bắt buộc").trim(),
     description: yup
       .string("Mô tả")
-      .required("Mô tả là trường bắt buộc")
+      // .required("Mô tả là trường bắt buộc")
       .trim(),
     quote: yup
       .string("Lời bình")
@@ -110,7 +125,11 @@ function AddOneBook(props) {
     key: yup.string("Lời bình"),
     price: yup
       .number("Giá trị")
-      .moreThan(0, "Giá trị không thể nhỏ hơn 0")
+      .test(
+        "negative Check",
+        "Giá tiền không thể bé hơn 0!",
+        (value) => value >= 0
+      )
       .lessThan(1000, "Giá trị không thể vượt quá 1000")
       .required("Gía trị là trường bắt buộc"),
   });
@@ -126,7 +145,33 @@ function AddOneBook(props) {
   });
   function submitCreateBook(values) {
     if (pdf && pdf.file) {
-      let bookData = { ...values, tags: tags };
+      setPending(true);
+      if (pdf.requirePassword) {
+        enqueueSnackbar(`Mật khẩu hiện tại chưa chính xác!`, {
+          variant: "warning",
+        });
+        setPending(false);
+        return;
+      }
+      if (!pdf.pages || pdf.pages === 0) {
+        enqueueSnackbar(`Vui lòng chọn sách có số trang lớn hơn 0!`, {
+          variant: "warning",
+        });
+        setPending(false);
+        return;
+      }
+      var listIdTags = [];
+      selectedTags.forEach((tag) => {
+        listIdTags.push(tag._id);
+      });
+      if (listIdTags.length === 0) {
+        enqueueSnackbar(`Vui lòng gắn thẻ cho Sách!`, {
+          variant: "warning",
+        });
+        setPending(false);
+        return;
+      }
+      let bookData = { ...values, tags: listIdTags };
       var formData = new FormData();
       if (thumbnail && thumbnail.file) {
         formData.append("thumbnail", thumbnail.file);
@@ -137,16 +182,65 @@ function AddOneBook(props) {
       adminAPI
         .postBook(formData)
         .then((res) => {
-          console.log({ res });
+          setPending(false);
+          enqueueSnackbar(`Tạo sách mới thành công!`, {
+            variant: "success",
+          });
+          handleReset();
         })
         .catch((err) => {
-          console.log({ err });
+          setPending(false);
+          switch (err.response.status) {
+            case 405:
+              enqueueSnackbar(`Mô tả sách không được bỏ trống!`, {
+                variant: "error",
+              });
+              return;
+            case 406:
+              enqueueSnackbar(`Tên Sách đã tồn tại!`, {
+                variant: "error",
+              });
+              return;
+            case 407:
+              enqueueSnackbar(`Khởi tạo Ảnh bìa thất bại!`, {
+                variant: "error",
+              });
+              return;
+            case 408:
+              enqueueSnackbar(`Khởi tạo Intro thất bại!`, {
+                variant: "error",
+              });
+              return;
+            case 409:
+              enqueueSnackbar(`Mã hóa Sách thất bại!`, {
+                variant: "error",
+              });
+              return;
+            case 410:
+              enqueueSnackbar(`Không nhận được file Sách!`, {
+                variant: "error",
+              });
+              return;
+            default:
+              enqueueSnackbar(`Lỗi Server!`, {
+                variant: "error",
+              });
+              return;
+          }
         });
     } else {
       enqueueSnackbar(`Bạn chưa tải lên file Sách!`, {
         variant: "warning",
       });
     }
+  }
+  function handleReset() {
+    pdfRef.current.value = null;
+    thumbnailRef.current.value = null;
+    setThumbnail({});
+    setPdf({});
+    setSelectedTags([]);
+    formik.handleReset();
   }
   const classes = useStyles();
   return (
@@ -155,72 +249,97 @@ function AddOneBook(props) {
         <h3 className="bee-card-title">THÊM SÁCH</h3>
       </div>
       <div className="bee-card-body row">
-        <div className="file-section">
-          <div className=" file-box thumbnail-box">
-            <div className="file-intro thumbnail-input">
-              <button className="upload-g-btn bee-btn yellow">
-                Tải lên ảnh bìa sách
-                <input
-                  type={"file"}
-                  accept={".jpg,.png,.gif"}
-                  onChange={handleThumbnailChange}
-                />
-              </button>
-              {!thumbnail.url ? (
-                <div className="place-holder">
-                  <UploadIcon />
-                  <p>Tải lên ảnh bìa sách</p>
-                  <i>(.jpg, .png, .gif)</i>
-                </div>
-              ) : (
-                <>
-                  <div
-                    className="image-intro"
-                    style={
-                      thumbnail.url
-                        ? { backgroundImage: `url("${thumbnail.url}")` }
-                        : {}
-                    }
-                  ></div>
-                  {/* <button
+        <FormikProvider value={formik}>
+          <div className="file-section">
+            <div className=" file-box thumbnail-box">
+              <div className="file-intro thumbnail-input">
+                <button className="upload-g-btn bee-btn yellow">
+                  Tải lên ảnh bìa sách
+                  <input
+                    type={"file"}
+                    accept={".jpg,.png,.gif"}
+                    onChange={handleThumbnailChange}
+                    ref={thumbnailRef}
+                  />
+                </button>
+                {!thumbnail.url ? (
+                  <div className="place-holder">
+                    <UploadIcon />
+                    <p>Tải lên ảnh bìa sách</p>
+                    <i>(.jpg, .png, .gif)</i>
+                  </div>
+                ) : (
+                  <>
+                    <div
+                      className="image-intro"
+                      style={
+                        thumbnail.url
+                          ? { backgroundImage: `url("${thumbnail.url}")` }
+                          : {}
+                      }
+                    ></div>
+                    {/* <button
                     className="cancel-g-btn bee-btn red"
                     onClick={handleRemoveThumbnail}
                   >
                     Tự động lấy bìa từ Sách
                   </button> */}
-                </>
-              )}
-            </div>
-            {/* <p className="filename">{`book01.png`}</p>
+                  </>
+                )}
+              </div>
+              {/* <p className="filename">{`book01.png`}</p>
             <p className="desc">{`4Mb`}</p> */}
-          </div>
-          <div className=" file-box pdf-box">
-            <div className="file-intro pdf-input">
-              <button className="upload-g-btn bee-btn yellow">
-                Tải lên file Sách
-                <input
-                  className="bee-btn"
-                  type={"file"}
-                  accept={".pdf"}
-                  onChange={handleTPdfChange}
-                />
-              </button>
-              {!pdf.url ? (
-                <div className="place-holder">
-                  <UploadIcon />
-                  <p>Tải lên file Sách</p>
-                  <i>(.pdf)</i>
-                </div>
-              ) : (
-                <PDFViewer url={pdf.url} password={pdf.key} key={pdf.key} />
-              )}
             </div>
-            {/* <p className="filename">{`book01.png`}</p>
+            <div className=" file-box pdf-box">
+              <div className="file-intro pdf-input">
+                <button className="upload-g-btn bee-btn yellow">
+                  Tải lên file Sách
+                  <input
+                    className="bee-btn"
+                    type={"file"}
+                    accept={".pdf"}
+                    onChange={handlePdfChange}
+                    ref={pdfRef}
+                  />
+                </button>
+                {!pdf.url ? (
+                  <div className="place-holder">
+                    <UploadIcon />
+                    <p>Tải lên file Sách</p>
+                    <i>(.pdf)</i>
+                  </div>
+                ) : (
+                  <>
+                    <PDFViewer
+                      handleRequestPasswordAndPages={
+                        handleRequestPasswordAndPages
+                      }
+                      url={pdf.url}
+                      password={pdf.key}
+                      key={pdf.key}
+                    />
+                    {pdf.requirePassword && (
+                      <Grid item className={classes.field}>
+                        <FastField
+                          component={InputField}
+                          name="key"
+                          label="Mật khẩu hiện tại"
+                          fields={{
+                            onBlur: (e) => {
+                              setPdf({ ...pdf, key: e.target.value });
+                            },
+                          }}
+                        />
+                      </Grid>
+                    )}
+                  </>
+                )}
+              </div>
+              {/* <p className="filename">{`book01.png`}</p>
             <p className="desc">{`4Mb`}</p> */}
+            </div>
           </div>
-        </div>
-        <div className="info-section bee-scroll">
-          <FormikProvider value={formik}>
+          <div className="info-section bee-scroll">
             <form onSubmit={formik.handleSubmit}>
               <Grid item className={classes.field}>
                 <FastField
@@ -235,18 +354,6 @@ function AddOneBook(props) {
                   component={InputField}
                   name="author"
                   label="Tác giả"
-                />
-              </Grid>
-              <Grid item className={classes.field}>
-                <FastField
-                  component={InputField}
-                  name="key"
-                  label="Mật khẩu hiện tại"
-                  fields={{
-                    onBlur: (e) => {
-                      setPdf({ ...pdf, key: e.target.value });
-                    },
-                  }}
                 />
               </Grid>
               <Grid item className={classes.field}>
@@ -274,7 +381,7 @@ function AddOneBook(props) {
                   fields={{ minRows: 3 }}
                 />
               </Grid>
-              <Grid item className={classes.field}>
+              {/* <Grid item className={classes.field}>
                 <FastField
                   component={InputField}
                   name="description"
@@ -282,14 +389,91 @@ function AddOneBook(props) {
                   multiline={true}
                   fields={{ minRows: 5 }}
                 />
+              </Grid> */}
+              <Grid item className={classes.field}>
+                <FastField>
+                  {({ field, form, meta }) => {
+                    return (
+                      <FroalaEditor
+                        config={{
+                          quickInsertTags: [""],
+                          toolbarButtons: {
+                            moreText: {
+                              buttons: [
+                                "bold",
+                                "italic",
+                                "underline",
+                                "strikeThrough",
+                                "subscript",
+                                "superscript",
+                                "fontFamily",
+                                "fontSize",
+                                "textColor",
+                                "backgroundColor",
+                                "inlineClass",
+                                "inlineStyle",
+                                "clearFormatting",
+                              ],
+                              align: "left",
+                              buttonsVisible: 3,
+                            },
+                            moreParagraph: {
+                              buttons: [
+                                "alignLeft",
+                                "alignCenter",
+                                "formatOLSimple",
+                                "alignRight",
+                                "alignJustify",
+                                "formatOL",
+                                "formatUL",
+                                "paragraphFormat",
+                                "paragraphStyle",
+                                "lineHeight",
+                                "outdent",
+                                "indent",
+                                "quote",
+                              ],
+                              align: "left",
+                              buttonsVisible: 0,
+                            },
+                            moreMisc: {
+                              buttons: [
+                                "undo",
+                                "redo",
+                                "fullscreen",
+                                "spellChecker",
+                                "html",
+                                "insertLink",
+                                "emoticons",
+                                "fontAwesome",
+                                "specialCharacters",
+                                "embedly",
+                                "insertHR",
+                              ],
+                              align: "right",
+                              buttonsVisible: 2,
+                            },
+                          },
+                        }}
+                        className="ReadingSpace__editor"
+                        tag="textarea"
+                        model={field.value.description}
+                        onModelChange={(modal) =>
+                          formik.setFieldValue("description", modal)
+                        }
+                      />
+                    );
+                  }}
+                </FastField>
               </Grid>
             </form>
-          </FormikProvider>
-        </div>
+          </div>
+        </FormikProvider>
+        {pending && <LoadingAnimationIcon className="absolute" />}
       </div>
       <div className="bee-card-footer">
         <div className="right">
-          <button className="bee-btn no-fill" onClick={formik.handleReset}>
+          <button className="bee-btn no-fill" onClick={handleReset}>
             DỌN DẸP
           </button>
           <button className="bee-btn blue" onClick={formik.handleSubmit}>

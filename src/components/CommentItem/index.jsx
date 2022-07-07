@@ -28,7 +28,7 @@ function CommentItem(props) {
           </p>
           <p className="email">{comment.user.email}</p>
         </div>
-        {comment.type !== 0 && (
+        {comment.type && comment.type !== 0 ? (
           <div
             className={
               comment.type === 1
@@ -38,7 +38,7 @@ function CommentItem(props) {
           >
             {comment.type === 1 ? <ThumbUpIcon /> : <ThumbDownIcon />}
           </div>
-        )}
+        ) : ""}
       </div>
       <div className="content">{comment.content}</div>
       {comment.status === 0 ? (

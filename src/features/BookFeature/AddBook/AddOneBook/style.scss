@@ -45,7 +45,9 @@
           }
           & > .bee-btn {
             width: 100%;
-            margin-bottom: 10px;
+          }
+          & > .pdf-viewer, & > .image-intro{
+            margin: 10px 0;
           }
           & > .cancel-g-btn {
             margin-top: 10px;

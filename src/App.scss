@@ -151,6 +151,10 @@
 
   &.yellow {
     background: #f9b700;
+    color: #333333!important;
+    & > .icon {
+      fill: #333333!important;
+    }
     &:hover {
       background: #e2a600;
     }

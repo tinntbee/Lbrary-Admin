@@ -50,7 +50,6 @@ function AddMultiUser(props) {
   }
   return (
     <div className={"bee-card add-multi-user-container " + className}>
-      {" "}
       <div className="bee-card-header bg-green-50">
         <h3 className="bee-card-title">NHẬP DANH SÁCH TÀI KHOẢN</h3>
         <div className="bee-card-actions">

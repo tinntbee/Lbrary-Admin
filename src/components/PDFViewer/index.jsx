@@ -6,15 +6,17 @@ import ArrowRightIcon from "../Icon/ArrowRightIcon";
 import "./style.scss";
 
 function PDFViewer(props) {
-  const { url, key, password } = props;
+  const { url, password, handleRequestPasswordAndPages, name } = props;
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
   let _passwordCallback;
 
   function onDocumentLoadSuccess({ numPages }) {
+    handleRequestPasswordAndPages(false, numPages);
     setNumPages(numPages);
   }
   function onPassword(callback) {
+    handleRequestPasswordAndPages(true, null);
     if (password) {
       callback(password);
       return;
@@ -33,7 +35,7 @@ function PDFViewer(props) {
     if (password && _passwordCallback) {
       _passwordCallback(password);
     }
-  }, [password]);
+  }, [_passwordCallback, password]);
   return (
     <div className={numPages ? "pdf-viewer" : "pdf-viewer loading"}>
       <Document
@@ -41,28 +43,31 @@ function PDFViewer(props) {
         loading={<LoadingAnimationIcon />}
         onLoadSuccess={onDocumentLoadSuccess}
         onPassword={onPassword}
+        className={numPages ? "" : "loading"}
       >
-        <Page width={`247`} className="pdf-page" pageNumber={pageNumber} />
+        <Page width={247} className="pdf-page" pageNumber={pageNumber} />
+        <div className="controllers row">
+          <button
+            className="bee-btn left-btn"
+            disabled={pageNumber < 2}
+            onClick={() => setPageNumber(pageNumber - 1)}
+          >
+            <ArrowLeftIcon />
+          </button>
+          <p>
+            {pageNumber}/{numPages}
+          </p>
+          <button
+            className="bee-btn left-btn"
+            disabled={pageNumber > numPages - 1}
+            onClick={() => setPageNumber(pageNumber + 1)}
+          >
+            <ArrowRightIcon />
+          </button>
+        </div>
       </Document>
-      <div className="controllers row">
-        <button
-          className="bee-btn left-btn"
-          disabled={pageNumber < 2}
-          onClick={() => setPageNumber(pageNumber - 1)}
-        >
-          <ArrowLeftIcon />
-        </button>
-        <p>
-          {pageNumber}/{numPages}
-        </p>
-        <button
-          className="bee-btn left-btn"
-          disabled={pageNumber > numPages - 1}
-          onClick={() => setPageNumber(pageNumber + 1)}
-        >
-          <ArrowRightIcon />
-        </button>
-      </div>
+
+      {name && <p>{name}</p>}
     </div>
   );
 }
