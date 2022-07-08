@@ -4,6 +4,8 @@ import BookIcon from "../Icon/BookIcon";
 import BookSymbolIcon from "../Icon/BookSymbolIcon";
 import ListIcon from "../Icon/ListIcon";
 import AddIcon from "../Icon/AddIcon";
+import TagIcon from "../Icon/TagIcon";
+import CategoryIcon from "../Icon/CategoryIcon";
 
 const tabs = [
   {
@@ -54,13 +56,13 @@ const tabs = [
     active: false,
     subTabs: [
       {
-        icon: <ListIcon />,
+        icon: <TagIcon />,
         title: "Thẻ Sách",
         active: false,
         path: "/categories-tags/tags-list",
       },
       {
-        icon: <ListIcon />,
+        icon: <CategoryIcon />,
         title: "Danh mục Sách",
         active: false,
         path: "/categories-tags/categories-list",

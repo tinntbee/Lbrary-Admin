@@ -43,7 +43,7 @@ function Header(props) {
         <div className="box-m bg-light-green">
           <div className="content">
             <p className="value">{data.totalNewBooks}</p>
-            <p className="title">Người sách mới</p>
+            <p className="title">Sách mới</p>
           </div>
           <span className="icon-container">
             <AddBookIcon />

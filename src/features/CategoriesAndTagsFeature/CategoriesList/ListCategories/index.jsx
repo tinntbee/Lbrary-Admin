@@ -7,6 +7,8 @@ import BookIcon from "../../../../components/Icon/BookIcon";
 import LockIcon from "../../../../components/Icon/LockIcon";
 import UnlockIcon from "../../../../components/Icon/UnlockIcon";
 import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+import CategoryIcon from "../../../../components/Icon/CategoryIcon";
+import AddIcon from "../../../../components/Icon/AddIcon";
 
 ListCategories.propTypes = {};
 
@@ -44,7 +46,7 @@ function ListCategories(props) {
         </div>
       ),
       width: "150px",
-      center: true
+      center: true,
     },
     {
       name: "Thẻ",
@@ -80,7 +82,7 @@ function ListCategories(props) {
             style={{ padding: 0 }}
             onClick={() => handleViewCategory(row._id)}
           >
-            <BookIcon />
+            <CategoryIcon />
           </button>
           {row.is_active === 1 ? (
             <button
@@ -104,7 +106,13 @@ function ListCategories(props) {
       width: "120px",
     },
   ];
-  const { categories, pending, handleViewCategory } = props;
+  const {
+    categories,
+    pending,
+    handleViewCategory,
+    handleShowNewCategory,
+    handleBanCategory,
+  } = props;
   const [filteredCategories, setFilteredCategories] =
     React.useState(categories);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -112,8 +120,6 @@ function ListCategories(props) {
   const [filter, setFilter] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
-
-  function handleBanCategory(_id, is_active, name) {}
 
   React.useEffect(() => {
     setFilteredCategories([...categories]);
@@ -146,7 +152,14 @@ function ListCategories(props) {
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {};
 
-    return <SearchInput handleFilter={handleFilter} />;
+    return (
+      <div className="row">
+        <button className="bee-btn yellow" onClick={handleShowNewCategory}>
+          <AddIcon /> Thêm danh mục mới
+        </button>
+        <SearchInput handleFilter={handleFilter} />
+      </div>
+    );
   }, [resetPaginationToggle]);
   const ExpandedComponent = ({ data }) => {
     return <pre>{JSON.stringify(data, null, 2)}</pre>;

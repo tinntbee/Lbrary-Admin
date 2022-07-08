@@ -53,6 +53,10 @@ const adminAPI = {
   },
 
   //NOTE: Tags manage
+  checkExistTagName: ({ name }) => {
+    const url = "/admin/checkExistTagName";
+    return axiosClient.post(url, { name });
+  },
   getAllTags: () => {
     const url = "/admin/getAllTags";
     return axiosClient.get(url);
@@ -98,6 +102,10 @@ const adminAPI = {
   },
 
   //NOTE: Category manage
+  checkExistCategoryName: ({ name }) => {
+    const url = "/admin/checkExistCategoryName";
+    return axiosClient.post(url, { name });
+  },
   getAllCategories: () => {
     const url = "/admin/getAllCategories";
     return axiosClient.get(url);

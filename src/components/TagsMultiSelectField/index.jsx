@@ -55,7 +55,7 @@ function TagsMultiSelectField(props) {
         <div className="tags-content">
           <div className="values">
             {value.map((item, index) => (
-              <span>{"#" + item.name}</span>
+              <span key={index}>{"#" + item.name}</span>
             ))}
           </div>
           <div className="tags bee-scroll">
@@ -63,6 +63,7 @@ function TagsMultiSelectField(props) {
               options.map((item, index) => {
                 return (
                   <div
+                    key={index}
                     className={
                       isChecked(item._id) ? "bee-check checked" : "bee-check"
                     }

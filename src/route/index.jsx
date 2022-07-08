@@ -33,7 +33,7 @@ function BeeRoute(props) {
             <Route path="/book/add" component={AddBook} exact />
             <Redirect
               from="/categories-tags"
-              to="/categories-tags/categories-list"
+              to="/categories-tags/tags-list"
               exact
             />
             <Route

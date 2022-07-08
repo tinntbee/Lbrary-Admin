@@ -1,0 +1,28 @@
+.category-modify-container {
+  & > .information-section {
+    width: 500px;
+    max-width: 500px;
+    & .color-box {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      border: 1px solid #FFF;
+    }
+  }
+
+  & > .thumbnail-section {
+    min-width: 300px;
+    padding-top: 10px;
+    padding-left: 10px;
+    gap: 22px;
+    & .thumbnail {
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 10px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
+}

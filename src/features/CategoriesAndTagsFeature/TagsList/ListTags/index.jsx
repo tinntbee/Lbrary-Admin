@@ -6,6 +6,8 @@ import UnlockIcon from "../../../../components/Icon/UnlockIcon";
 import LockIcon from "../../../../components/Icon/LockIcon";
 import BookIcon from "../../../../components/Icon/BookIcon";
 import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+import TagIcon from "../../../../components/Icon/TagIcon";
+import AddIcon from "../../../../components/Icon/AddIcon";
 
 ListTags.propTypes = {};
 
@@ -45,13 +47,13 @@ function ListTags(props) {
             style={{ padding: 0 }}
             onClick={() => handleViewTagDetail(row._id)}
           >
-            <BookIcon />
+            <TagIcon />
           </button>
           {row.is_active === 1 ? (
             <button
               className="bee-btn red"
               style={{ padding: 0 }}
-              onClick={() => handleBanTag(row._id, 1, row.name)}
+              onClick={() => handleBanTag(row._id, 0, row.name)}
             >
               <LockIcon />
             </button>
@@ -59,7 +61,7 @@ function ListTags(props) {
             <button
               className="bee-btn blue"
               style={{ padding: 0 }}
-              onClick={() => handleBanTag(row._id, 0, row.name)}
+              onClick={() => handleBanTag(row._id, 1, row.name)}
             >
               <UnlockIcon />
             </button>
@@ -67,10 +69,11 @@ function ListTags(props) {
         </div>
       ),
       width: "200px",
-      center: true
+      center: true,
     },
   ];
-  const { tags, pending, handleViewTagDetail } = props;
+  const { tags, pending, handleViewTagDetail, handleShowNewTag, handleBanTag } =
+    props;
   const [filteredTags, setFilteredTags] = React.useState(tags);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [toggleCleared, setToggleCleared] = React.useState(false);
@@ -78,11 +81,18 @@ function ListTags(props) {
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
 
-  function handleBanTag(_id, is_active, name) {}
-
   React.useEffect(() => {
     setFilteredTags([...tags]);
   }, [tags]);
+  React.useEffect(() => {
+    var newFilteredTags = tags.filter((tag) => {
+      return (
+        tag.name.toLowerCase().includes(filter) ||
+        tag.description.toLowerCase().includes(filter)
+      );
+    });
+    setFilteredTags([...newFilteredTags]);
+  }, [tags, filter]);
 
   const handleRowSelected = React.useCallback((state) => {
     setSelectedRows(state.selectedRows);
@@ -91,18 +101,28 @@ function ListTags(props) {
     setFilter(str.toLowerCase());
   }
   const contextActions = React.useMemo(() => {
-    function handleBanMultiTags(is_banned) {
+    function handleBanMultiTags(is_active) {
       selectedRows.forEach((row) => {
-        // handleBanUser(row._id, is_banned, row.name);
+        handleBanTag(row._id, is_active, row.name);
       });
     }
 
     return (
       <>
-        <button className="bee-btn blue" onClick={() => {}}>
+        <button
+          className="bee-btn blue"
+          onClick={() => {
+            handleBanMultiTags(1);
+          }}
+        >
           Mở khóa
         </button>
-        <button onClick={() => {}} className="bee-btn red">
+        <button
+          onClick={() => {
+            handleBanMultiTags(0);
+          }}
+          className="bee-btn red"
+        >
           Khóa
         </button>
       </>
@@ -111,7 +131,14 @@ function ListTags(props) {
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {};
 
-    return <SearchInput handleFilter={handleFilter} />;
+    return (
+      <div className="row">
+        <button className="bee-btn yellow" onClick={handleShowNewTag}>
+          <AddIcon /> Thêm thẻ mới
+        </button>
+        <SearchInput handleFilter={handleFilter} />
+      </div>
+    );
   }, [resetPaginationToggle]);
   const ExpandedComponent = ({ data }) => {
     return <pre>{JSON.stringify(data, null, 2)}</pre>;
