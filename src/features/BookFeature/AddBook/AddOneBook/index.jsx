@@ -32,6 +32,7 @@ function AddOneBook(props) {
   const thumbnailRef = React.useRef();
   const pdfRef = React.useRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [tags, setTags] = React.useState([]);
   const [pending, setPending] = React.useState(false);
   const [thumbnail, setThumbnail] = React.useState({
     // file: undefined,
@@ -70,7 +71,6 @@ function AddOneBook(props) {
     tags: [],
   });
   const [selectedTags, setSelectedTags] = React.useState([]);
-  const [tags, setTags] = React.useState([]);
 
   const fetchAllTags = async () => {
     adminAPI

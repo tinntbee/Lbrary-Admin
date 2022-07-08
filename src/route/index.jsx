@@ -11,6 +11,8 @@ import UserStatistic from "../features/UserFeature/UserStatistic";
 import BookStatistic from "../features/BookFeature/BookStatistic";
 import BookList from "../features/BookFeature/BookList";
 import AddBook from "../features/BookFeature/AddBook";
+import CategoriesList from "../features/CategoriesAndTagsFeature/CategoriesList";
+import TagsList from "../features/CategoriesAndTagsFeature/TagsList";
 
 function BeeRoute(props) {
   return (
@@ -29,11 +31,22 @@ function BeeRoute(props) {
             <Route path="/book/statistic" component={BookStatistic} exact />
             <Route path="/book/list" component={BookList} exact />
             <Route path="/book/add" component={AddBook} exact />
-            <Route
-              path="/categories-tags"
-              component={CategoriesAndTagsFeature}
+            <Redirect
+              from="/categories-tags"
+              to="/categories-tags/categories-list"
               exact
             />
+            <Route
+              path="/categories-tags/categories-list"
+              component={CategoriesList}
+              exact
+            />
+            <Route
+              path="/categories-tags/tags-list"
+              component={TagsList}
+              exact
+            />
+            <Redirect from="/" to="/user/statistic" />
           </Switch>
         </div>
       </div>

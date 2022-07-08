@@ -7,7 +7,7 @@ import AddMultiBook from "./AddMultiBook";
 AddBook.propTypes = {};
 
 function AddBook(props) {
-  const [tab, setTab] = React.useState(1);
+  const [tab, setTab] = React.useState(0);
   return (
     <div className="add-book-container">
       <div className="tabs-bar">

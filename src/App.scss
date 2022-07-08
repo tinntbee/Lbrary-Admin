@@ -127,9 +127,12 @@
     height: 100%;
     top: 0;
     left: 0;
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
-  &.blue {
+  &.blue:not([disabled]) {
     background: #1aa0bc;
     &:hover {
       background: #0f90ab;
@@ -139,21 +142,25 @@
     }
   }
 
-  &.no-fill {
+  &.no-fill:not([disabled]) {
     color: #e0e0e0;
     &:hover {
+      background: rgba(249, 183, 0, 0.1);
       color: white;
     }
     &:active {
       color: white;
     }
+    & > .icon {
+      fill: white;
+    }
   }
 
-  &.yellow {
+  &.yellow:not([disabled]) {
     background: #f9b700;
-    color: #333333!important;
+    color: #333333 !important;
     & > .icon {
-      fill: #333333!important;
+      fill: #333333 !important;
     }
     &:hover {
       background: #e2a600;
@@ -163,7 +170,7 @@
     }
   }
 
-  &.red {
+  &.red:not([disabled]) {
     background: #eb5757;
     &:hover {
       background: #ca5252;
@@ -173,14 +180,20 @@
     }
   }
 
-  &:hover {
-    background: rgba(249, 183, 0, 0.1);
-    color: white;
+  &.no-fill:disabled {
+    color: #e0e0e0;
+    background-color: transparent;
+  }
 
+  &:disabled {
+    color: #e0e0e0;
+    background: #828282;
+    cursor: not-allowed;
     & > .icon {
-      fill: white;
+      fill: #e0e0e0;
     }
   }
+
   & > .icon {
     margin: 5px;
   }

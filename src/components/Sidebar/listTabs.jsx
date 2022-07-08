@@ -54,22 +54,16 @@ const tabs = [
     active: false,
     subTabs: [
       {
-        icon: <ChartIcon />,
-        title: "Thống kê",
+        icon: <ListIcon />,
+        title: "Thẻ Sách",
         active: false,
-        path: "/categories-tags",
+        path: "/categories-tags/categories-list",
       },
       {
         icon: <ListIcon />,
-        title: "Danh sách",
+        title: "Danh mục Sách",
         active: false,
-        path: "/categories-tags",
-      },
-      {
-        icon: <AddIcon />,
-        title: "Thêm",
-        active: false,
-        path: "/categories-tags",
+        path: "/categories-tags/tags-list",
       },
     ],
     path: "/categories-tags",

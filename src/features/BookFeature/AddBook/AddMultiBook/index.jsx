@@ -6,6 +6,8 @@ import PDFViewer from "../../../../components/PDFViewer";
 import sleep from "../../../../utils/sleep";
 import DataTable from "react-data-table-component";
 import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+import adminAPI from "../../../../api/adminAPI";
+import { useSnackbar } from "notistack";
 
 AddMultiBook.propTypes = {};
 
@@ -30,6 +32,19 @@ const columns = [
     center: true,
   },
   {
+    name: "Thẻ Sách",
+    selector: (row) =>
+      row.tags.map((item, index) => (
+        <p>
+          <b className={item._id !== "X" ? "V" : "X"}>{`[${
+            item._id !== "X" ? "V" : "X"
+          }] `}</b>
+          <i>{`#${item.name}`}</i>
+        </p>
+      )),
+    width: "300px",
+  },
+  {
     name: "Lời Bình",
     selector: (row) => row.quote,
     width: "150px",
@@ -50,12 +65,29 @@ const columns = [
   },
   {
     name: "Tên File Sách",
-    selector: (row) => `[${row.pdf ? "V" : "X"}] ` + row.nameBook,
+    selector: (row) => (
+      <p>
+        <b className={row.pdf ? "V" : "X"}>{`[${row.pdf ? "V" : "X"}] `}</b>
+        {row.nameBook}
+      </p>
+    ),
     width: "200px",
   },
   {
-    name: "Tên File Ảnh",
-    selector: (row) => `[${row.thumbnail ? "V" : "X"}] ` + row.nameImage,
+    name: "Tên File Bìa Sách",
+    selector: (row) => (
+      <p>
+        <b className={row.thumbnail ? "V" : "X"}>{`[${
+          row.thumbnail ? "V" : "X"
+        }] `}</b>
+        {row.nameImage}
+      </p>
+    ),
+    width: "200px",
+  },
+  {
+    name: "Mật khẩu",
+    selector: (row) => row.key,
     width: "200px",
   },
   {
@@ -66,7 +98,10 @@ const columns = [
 ];
 
 function AddMultiBook(props) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [pendingBookData, setPendingBookData] = React.useState(false);
   const [pending, setPending] = React.useState(false);
+  const [tags, setTags] = React.useState([]);
   const [books, setBooks] = React.useState([
     // {
     //   index: 1,
@@ -79,15 +114,34 @@ function AddMultiBook(props) {
     //   price: 0,
     // },
   ]);
-  const [message, setMessage] = React.useState(
-    <p>
-      Đang upload... <b>50%</b> (<b>20</b> thành công, <b>30</b> thất bại,{" "}
-      <b>50</b> đang chờ){" "}
-    </p>
-  );
-  function handleRequestPasswordAndPages(_, __, ___) {}
+  const [message, setMessage] = React.useState();
+  function handleRequestPasswordAndPages(isLocked, numPages, index) {
+    let newPdfs = [...pdfs];
+    if (index > -1 && index < pdfs.length) {
+      newPdfs[index].isLocked = isLocked;
+      newPdfs.numPages = numPages;
+    }
+    setPdfs([...newPdfs]);
+    console.log({ newPdfs });
+  }
   const [thumbnails, setThumbnails] = React.useState([]);
   const [pdfs, setPdfs] = React.useState([]);
+  const fetchAllTags = async () => {
+    adminAPI
+      .getAllTags()
+      .then((res) => {
+        setTags(res);
+        // if (res && res.length > 0) {
+        //   setSelectedTags([res[0]]);
+        // }
+      })
+      .catch((err) => {
+        console.log({ err });
+        enqueueSnackbar(`Tải danh thẻ sách thất bại!`, {
+          variant: "warning",
+        });
+      });
+  };
   function handleReset() {
     setBooks([]);
     setPdfs([]);
@@ -106,18 +160,18 @@ function AddMultiBook(props) {
       );
       if (pdfIndex >= 0) {
         book.pdf = true;
-        book.filePdf = newPdfs[pdfIndex].file;
+        book.pdfIndex = pdfIndex;
         newPdfs[pdfIndex].password = book.key;
       } else {
         book.pdf = false;
-        book.filePdf = null;
+        book.pdfIndex = null;
       }
       if (imageIndex >= 0) {
         book.thumbnail = true;
-        book.fileThumbnail = _thumbnails[imageIndex].file;
+        book.imageIndex = imageIndex;
       } else {
         book.thumbnail = false;
-        book.fileThumbnail = null;
+        book.imageIndex = imageIndex;
       }
       newBooks[index] = { ...book };
     }
@@ -126,7 +180,7 @@ function AddMultiBook(props) {
     setBooks([...newBooks]);
   }
   async function handleFileOnChange(e) {
-    setPending(true);
+    setPendingBookData(true);
     const reader = new FileReader();
     var result = [];
     reader.onload = function (e) {
@@ -144,12 +198,27 @@ function AddMultiBook(props) {
           obj[headers[j].trim()] = words[j];
         }
         if (obj.name) {
+          const listTagsName = obj.tags ? obj.tags.split("-") : [];
+          let listTags = [];
+          listTagsName.forEach((tagName) => {
+            const tag = tags.find(
+              (t) => t.name.toLowerCase() === tagName.toLowerCase().trim()
+            );
+            if (tag) {
+              listTags.push({ _id: tag._id, name: tag.name });
+            } else {
+              if (tagName.trim()) {
+                listTags.push({ _id: "X", name: tagName.trim() });
+              }
+            }
+          });
           result.push({
             ...obj,
             status: "wait",
             index: i,
             pdf: false,
             thumbnail: false,
+            tags: listTags,
           });
         } else {
           continue;
@@ -160,7 +229,7 @@ function AddMultiBook(props) {
     await sleep(2000);
     e.target.value = null;
     handleCheckFile(result, pdfs, thumbnails);
-    setPending(false);
+    setPendingBookData(false);
   }
   const handleThumbnailsChange = (e) => {
     var files = e.target.files;
@@ -185,7 +254,7 @@ function AddMultiBook(props) {
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
       var url = URL.createObjectURL(file);
-      listPdfs.push({ url, file, password: "" });
+      listPdfs.push({ url, file, password: "1", isLocked: false, numPages: 0 });
     }
     setPdfs(listPdfs);
     e.target.value = null;
@@ -195,6 +264,151 @@ function AddMultiBook(props) {
         URL.revokeObjectURL(pdf.url);
       });
   };
+  async function handleCreateBooks() {
+    setPending(true);
+    enqueueSnackbar(`Bắt đầu nhập danh sách dữ liệu!`, {
+      variant: "warning",
+    });
+    setMessage(<p>Đang upload...</p>);
+    await sleep(2000);
+    let uploadBooks = [...books];
+    let waiting = uploadBooks.length;
+    let success = 0;
+    let fail = 0;
+    for (let index = 0; index < uploadBooks.length; index++) {
+      uploadBooks[index].status = "wait";
+    }
+    setBooks([...uploadBooks]);
+    console.log({ uploadBooks });
+    for (let index = 0; index < uploadBooks.length; index++) {
+      let book = uploadBooks[index];
+      var formData = new FormData();
+      book.status = "uploading...";
+      uploadBooks[index] = { ...book };
+      setBooks([...uploadBooks]);
+      setMessage(
+        <p>
+          Đang upload...{" "}
+          <b>{Math.round(((success + fail) * 100) / uploadBooks.length)}%</b> (
+          <b>{success}</b> thành công, <b>{fail}</b> thất bại,
+          <b> {waiting}</b> đang chờ)
+        </p>
+      );
+      await sleep(2000);
+      book.isUploaded = true;
+      if (!book.pdf) {
+        book.status = "Fail - [410] Không tìm thấy file Sách\n";
+        uploadBooks[index] = { ...book };
+        setBooks([...uploadBooks]);
+        fail++;
+        waiting--;
+        continue;
+      }
+      if (pdfs[book.pdfIndex].isLocked) {
+        book.status = "Fail - [Wrong password] Sách chưa được mở khóa\n";
+        uploadBooks[index] = { ...book };
+        setBooks([...uploadBooks]);
+        fail++;
+        waiting--;
+        continue;
+      }
+      if (book.thumbnail && thumbnails[book.imageIndex].file) {
+        formData.append("thumbnail", thumbnails[book.imageIndex].file);
+      }
+      formData.append("pdf", pdfs[book.pdfIndex].file);
+
+      let listIdTags = [];
+      book.tags.forEach((tag) => {
+        if (tag._id !== "X") {
+          listIdTags.push(tag._id);
+        }
+      });
+
+      if (listIdTags.length === 0) {
+        book.status = "Fail - [Null Tags] Sách không chứa thẻ\n";
+        uploadBooks[index] = { ...book };
+        setBooks([...uploadBooks]);
+        fail++;
+        waiting--;
+        continue;
+      }
+      let bookData = {
+        name: book.name,
+        author: book.author,
+        quote: book.quote,
+        description: book.description,
+        price: book.price,
+        key: pdfs[book.pdfIndex].password,
+        tags: listIdTags,
+      };
+      formData.append("detail", JSON.stringify(bookData));
+      const status = await postBook(formData);
+      waiting--;
+      switch (status) {
+        case 200:
+          book.status = "Success\n";
+          success++;
+          break;
+        case 405:
+          book.status = "Fail - [405] Mô tả sách trống\n";
+          fail++;
+          break;
+        case 406:
+          book.status = "Fail - [406] Tên Sách đã tồn tại\n";
+          fail++;
+          break;
+        case 407:
+          book.status = "Fail - [407] Khởi tạo bìa thất bại\n";
+          fail++;
+          break;
+        case 408:
+          book.status = "Fail - [408] Khởi tạo Intro thất bại\n";
+          fail++;
+          break;
+        case 409:
+          book.status = "Fail - [409] Mã hóa Sách thất bại\n";
+          fail++;
+          break;
+        case 410:
+          book.status = "Fail - [410] Không nhận được file Sách\n";
+          fail++;
+          break;
+        default:
+          book.status = "Fail - [500]\n";
+          fail++;
+          break;
+      }
+      uploadBooks[index] = { ...book };
+      setBooks([...uploadBooks]);
+    }
+    setMessage(
+      <p>
+        Hoàn tất{" "}
+        <b>{Math.round(((success + fail) * 100) / uploadBooks.length)}%</b> (
+        <b>{success}</b> thành công, <b>{fail}</b> thất bại,
+        <b> {waiting}</b> đang chờ)
+      </p>
+    );
+    enqueueSnackbar(`Nhập danh sách hoàn tất!`, {
+      variant: "success",
+    });
+    setPending(false);
+  }
+  async function postBook(formData) {
+    return new Promise((resolve, reject) => {
+      adminAPI
+        .postBook(formData)
+        .then((res) => {
+          resolve(200);
+        })
+        .catch((err) => {
+          resolve(err.response.status);
+        });
+    });
+  }
+  React.useEffect(() => {
+    fetchAllTags();
+  }, []);
   return (
     <div
       className={
@@ -212,7 +426,7 @@ function AddMultiBook(props) {
             </p>
             <div className="line" />
             {pdfs.length > 0 && <label>Số lượng: {pdfs.length}</label>}
-            <button className="bee-btn yellow">
+            <button className="bee-btn yellow" disabled={pending}>
               <UploadIcon />
               Import PDFs
               <input
@@ -220,6 +434,7 @@ function AddMultiBook(props) {
                 multiple
                 accept={".pdf"}
                 onChange={handlePdfsChange}
+                disabled={pending}
               />
             </button>
           </div>
@@ -227,6 +442,7 @@ function AddMultiBook(props) {
             <div className="section-content row bee-scroll">
               {pdfs.map((item, index) => (
                 <PDFViewer
+                  index={index}
                   url={item.url}
                   password={item.password}
                   key={index + "-" + item.password}
@@ -246,7 +462,7 @@ function AddMultiBook(props) {
             {thumbnails.length > 0 && (
               <label>Số lượng: {thumbnails.length}</label>
             )}
-            <button className="bee-btn yellow">
+            <button className="bee-btn yellow" disabled={pending}>
               <UploadIcon />
               Import Images
               <input
@@ -254,6 +470,7 @@ function AddMultiBook(props) {
                 multiple
                 accept={".png,.gif,.jpg"}
                 onChange={handleThumbnailsChange}
+                disabled={pending}
               />
             </button>
           </div>
@@ -279,13 +496,14 @@ function AddMultiBook(props) {
             </p>
             <div className="line" />
             {books.length > 0 && <label>Số lượng: {books.length}</label>}
-            <button className="bee-btn yellow">
+            <button className="bee-btn yellow" disabled={pending}>
               <UploadIcon />
               Import CSV
               <input
                 type={"file"}
                 accept={".csv"}
                 onChange={handleFileOnChange}
+                disabled={pending}
               />
             </button>
           </div>
@@ -299,7 +517,7 @@ function AddMultiBook(props) {
                 data={books}
                 pagination
                 defaultSortFieldId={2}
-                progressPending={pending}
+                progressPending={pendingBookData}
                 progressComponent={<LoadingAnimationIcon />}
               />
             </div>
@@ -307,12 +525,21 @@ function AddMultiBook(props) {
         </div>
       </div>
       <div className="bee-card-footer border-line-top">
+        <div className="left">{message}</div>
         <div className="right">
-          <button className="bee-btn no-fill" onClick={handleReset}>
+          <button
+            className="bee-btn no-fill"
+            onClick={handleReset}
+            disabled={pending}
+          >
             DỌN DẸP
           </button>
-          <button className="bee-btn blue" onClick={() => {}}>
-            TẠO MỚI
+          <button
+            className="bee-btn blue"
+            onClick={handleCreateBooks}
+            disabled={pending}
+          >
+            {pending ? "ĐANG TẠO..." : "TẠO MỚI"}
           </button>
         </div>
       </div>

@@ -1,47 +1,63 @@
 import React from "react";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
+import {
+  Document,
+  Page,
+  PasswordResponses,
+} from "react-pdf/dist/esm/entry.webpack";
 import LoadingAnimationIcon from "../Icon/Animation/LoadingAnimationIcon";
 import ArrowLeftIcon from "../Icon/ArrowLeft";
 import ArrowRightIcon from "../Icon/ArrowRightIcon";
 import "./style.scss";
 
 function PDFViewer(props) {
-  const { url, password, handleRequestPasswordAndPages, name } = props;
+  console.log("reload");
+  const { url, password, handleRequestPasswordAndPages, name, index } = props;
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
-  let _passwordCallback;
 
   function onDocumentLoadSuccess({ numPages }) {
-    handleRequestPasswordAndPages(false, numPages);
+    handleRequestPasswordAndPages(false, numPages, index);
     setNumPages(numPages);
   }
-  function onPassword(callback) {
-    handleRequestPasswordAndPages(true, null);
-    if (password) {
-      callback(password);
-      return;
-    }
-    _passwordCallback = callback;
+  function onDocumentLoadError(e) {
+    console.log({ e });
   }
-  function enterPassword() {
-    console.log("enter");
-    _passwordCallback("1234");
+  function onPassword(callback, reason) {
+    function callbackProxy(password) {
+      // Cancel button handler
+      if (!password) {
+        handleRequestPasswordAndPages(true, null, index);
+        return;
+      }
+      callback(password);
+    }
+    console.log({ reason });
+    switch (reason) {
+      case 1: {
+        // const password = prompt('Enter the password to open this PDF file.');
+        callbackProxy(password);
+        break;
+      }
+      case 2: {
+        handleRequestPasswordAndPages(true, null, index);
+        // const password = prompt('Invalid password. Please try again.');
+        // callbackProxy(password);
+        break;
+      }
+      default:
+    }
   }
   React.useEffect(() => {
     setNumPages(null);
     setPageNumber(1);
   }, [url]);
-  React.useEffect(() => {
-    if (password && _passwordCallback) {
-      _passwordCallback(password);
-    }
-  }, [_passwordCallback, password]);
   return (
     <div className={numPages ? "pdf-viewer" : "pdf-viewer loading"}>
       <Document
         file={url}
         loading={<LoadingAnimationIcon />}
         onLoadSuccess={onDocumentLoadSuccess}
+        onLoadError={onDocumentLoadError}
         onPassword={onPassword}
         className={numPages ? "" : "loading"}
       >

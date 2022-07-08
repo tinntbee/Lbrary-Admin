@@ -15,10 +15,12 @@
   }
 
   & > .bee-card-body {
+    position: relative;
     & > .section {
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.1);
       padding: 15px;
+      position: relative;
       & > .section-header {
         width: 100%;
         align-items: center;
@@ -67,6 +69,12 @@
           min-width: 100%;
           width: fit-content;
           height: fit-content;
+          & b.X {
+            color: #eb5757;
+          }
+          & b.V {
+            color: #6fcf97;
+          }
           & > div:nth-child(2) {
             &::-webkit-scrollbar {
               width: 17px;
