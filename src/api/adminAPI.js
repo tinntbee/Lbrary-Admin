@@ -156,6 +156,12 @@ const adminAPI = {
     const url = "/admin/userByMonth";
     return axiosClient.get(url);
   },
+
+  //NOTE: forum
+  banCommentOrReply: ({ _id, status }) => {
+    const url = "/admin/banCommentOrReply/" + _id;
+    return axiosClient.put(url, { status });
+  },
 };
 
 export default adminAPI;

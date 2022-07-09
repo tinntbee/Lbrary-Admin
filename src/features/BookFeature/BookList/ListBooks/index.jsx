@@ -42,8 +42,8 @@ function ListBooks(props) {
           row.tags &&
           row.tags.map((tag, index) => {
             return (
-              <div>
-                <span class="badge m bg-green">{"#" + tag.name}</span>
+              <div key={index}>
+                <span className="badge m bg-green">{"#" + tag.name}</span>
               </div>
             );
           })
@@ -141,7 +141,7 @@ function ListBooks(props) {
             <button
               className="bee-btn red"
               style={{ padding: 0 }}
-              onClick={() => handleBanBook(row._id, 1, row.name)}
+              onClick={() => handleBanBook(row._id, 0, row.name)}
             >
               <LockIcon />
             </button>
@@ -149,7 +149,7 @@ function ListBooks(props) {
             <button
               className="bee-btn blue"
               style={{ padding: 0 }}
-              onClick={() => handleBanBook(row._id, 0, row.name)}
+              onClick={() => handleBanBook(row._id, 1, row.name)}
             >
               <UnlockIcon />
             </button>
@@ -159,18 +159,16 @@ function ListBooks(props) {
       width: "120px",
     },
   ];
-  const { books, pending, handleViewBookDetail} = props;
-  const [filteredUsers, setFilteredUsers] = React.useState(books);
+  const { books, pending, handleViewBookDetail, handleBanBook } = props;
+  const [filteredBooks, setFilteredBooks] = React.useState(books);
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [toggleCleared, setToggleCleared] = React.useState(false);
   const [filter, setFilter] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
 
-  function handleBanBook(_id, is_active, name) {}
-
   React.useEffect(() => {
-    setFilteredUsers([...books]);
+    setFilteredBooks([...books]);
   }, [books]);
 
   const handleRowSelected = React.useCallback((state) => {
@@ -179,19 +177,41 @@ function ListBooks(props) {
   function handleFilter(str) {
     setFilter(str.toLowerCase());
   }
+  React.useEffect(() => {
+    var newBookFilter = books.filter((book) => {
+      return (
+        book.name.toLowerCase().includes(filter) ||
+        book.description.toLowerCase().includes(filter) ||
+        book.tags.filter((c) => c.name.toLowerCase().includes(filter)).length >
+          0 ||
+        book.quote.toString().toLowerCase().includes(filter)
+      );
+    });
+    setFilteredBooks([...newBookFilter]);
+  }, [books, filter]);
   const contextActions = React.useMemo(() => {
-    function handleBanMultiBook(is_banned) {
+    function handleBanMultiBook(is_active) {
       selectedRows.forEach((row) => {
-        // handleBanUser(row._id, is_banned, row.name);
+        handleBanBook(row._id, is_active, row.name);
       });
     }
 
     return (
       <>
-        <button className="bee-btn blue" onClick={() => {}}>
+        <button
+          className="bee-btn blue"
+          onClick={() => {
+            handleBanMultiBook(1);
+          }}
+        >
           Mở khóa
         </button>
-        <button onClick={() => {}} className="bee-btn red">
+        <button
+          onClick={() => {
+            handleBanMultiBook(0);
+          }}
+          className="bee-btn red"
+        >
           Khóa
         </button>
       </>
@@ -215,7 +235,7 @@ function ListBooks(props) {
           columns={columns}
           selectableRows
           pagination
-          data={filteredUsers}
+          data={filteredBooks}
           defaultSortFieldId={2}
           contextActions={contextActions}
           paginationResetDefaultPage={resetPaginationToggle}

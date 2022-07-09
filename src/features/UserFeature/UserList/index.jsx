@@ -16,6 +16,7 @@ function UserList(props) {
     avatar: "",
     nickname: "",
     faculty: "",
+    email: "",
     gender: "",
     dob: "1900/01/01",
     hoa: 0,

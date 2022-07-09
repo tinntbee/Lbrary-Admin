@@ -10,8 +10,8 @@ import ArrowRightIcon from "../Icon/ArrowRightIcon";
 import "./style.scss";
 
 function PDFViewer(props) {
-  console.log("reload");
-  const { url, password, handleRequestPasswordAndPages, name, index } = props;
+  const { url, password, handleRequestPasswordAndPages, name, index, width } =
+    props;
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
 
@@ -31,7 +31,6 @@ function PDFViewer(props) {
       }
       callback(password);
     }
-    console.log({ reason });
     switch (reason) {
       case 1: {
         // const password = prompt('Enter the password to open this PDF file.');
@@ -61,10 +60,14 @@ function PDFViewer(props) {
         onPassword={onPassword}
         className={numPages ? "" : "loading"}
       >
-        <Page width={247} className="pdf-page" pageNumber={pageNumber} />
+        <Page
+          width={width ? width : 247}
+          className="pdf-page"
+          pageNumber={pageNumber}
+        />
         <div className="controllers row">
           <button
-            className="bee-btn left-btn"
+            className="bee-btn left-btn no-fill"
             disabled={pageNumber < 2}
             onClick={() => setPageNumber(pageNumber - 1)}
           >
@@ -74,7 +77,7 @@ function PDFViewer(props) {
             {pageNumber}/{numPages}
           </p>
           <button
-            className="bee-btn left-btn"
+            className="bee-btn left-btn no-fill"
             disabled={pageNumber > numPages - 1}
             onClick={() => setPageNumber(pageNumber + 1)}
           >

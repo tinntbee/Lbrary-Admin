@@ -7,7 +7,7 @@ import ThumbDownIcon from "../Icon/ThumbDownIcon";
 CommentItem.propTypes = {};
 
 function CommentItem(props) {
-  const { comment } = props;
+  const { comment, handleBanComment } = props;
   console.log({ comment });
   return (
     <div
@@ -38,13 +38,25 @@ function CommentItem(props) {
           >
             {comment.type === 1 ? <ThumbUpIcon /> : <ThumbDownIcon />}
           </div>
-        ) : ""}
+        ) : (
+          ""
+        )}
       </div>
       <div className="content">{comment.content}</div>
       {comment.status === 0 ? (
-        <button className="bee-btn blue">Hiện Bình Luận</button>
+        <button
+          className="bee-btn blue"
+          onClick={() => handleBanComment(comment._id, 1)}
+        >
+          Hiện Bình Luận
+        </button>
       ) : (
-        <button className="bee-btn red">Ẩn Bình Luận</button>
+        <button
+          className="bee-btn red"
+          onClick={() => handleBanComment(comment._id, 0)}
+        >
+          Ẩn Bình Luận
+        </button>
       )}
     </div>
   );

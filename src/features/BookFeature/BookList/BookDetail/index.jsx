@@ -11,11 +11,35 @@ import BookIcon from "../../../../components/Icon/BookIcon";
 import LockIcon from "../../../../components/Icon/LockIcon";
 import UnlockIcon from "../../../../components/Icon/UnlockIcon";
 import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+import BookViewer from "../BookViewer";
 
 BookDetail.propTypes = {};
 
 function BookDetail(props) {
-  const { handleHide, handleBanBook, show, book, pending } = props;
+  const {
+    handleHide,
+    handleBanBook,
+    show,
+    book,
+    pending,
+    handleViewBookModify,
+    handleBanComment,
+  } = props;
+
+  console.log({ book });
+  const [bookViewer, setBookViewer] = React.useState({
+    url: "",
+    password: "",
+  });
+  const [showBookViewer, setShowBookViewer] = React.useState(false);
+  function handleViewBookIntro() {
+    setBookViewer({ url: book.linkIntro, password: "" });
+    setShowBookViewer(true);
+  }
+  function handleViewBook() {
+    setShowBookViewer(true);
+    setBookViewer({ url: book.link, password: book.key });
+  }
   return (
     <div
       className={
@@ -53,7 +77,17 @@ function BookDetail(props) {
                 )}
               </div>
               <div className="col intro">
-                <p className="name">{book.name}</p>
+                <p className="name">
+                  <a
+                    href={
+                      process.env.REACT_APP_CLIENT + `/book-detail/${book._id}`
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {book.name}
+                  </a>
+                </p>
                 <p className="author">{book.author ? book.author : "noname"}</p>
                 <div className="rates row">
                   <div className="col txt-yellow">
@@ -82,15 +116,24 @@ function BookDetail(props) {
                 </div>
                 <div className="tags bee-scroll">
                   {book.tags.map((item, index) => (
-                    <div className="tag">#{item.name}</div>
+                    <div key={index} className="tag">
+                      #{item.name}
+                    </div>
                   ))}
                 </div>
                 <div className="views row">
                   {book.linkIntro && (
-                    <button className="bee-btn blue">XEM INTRO</button>
+                    <button
+                      className="bee-btn blue"
+                      onClick={handleViewBookIntro}
+                    >
+                      XEM INTRO
+                    </button>
                   )}
                   {book.link && (
-                    <button className="bee-btn yellow">XEM SÁCH</button>
+                    <button className="bee-btn yellow" onClick={handleViewBook}>
+                      XEM SÁCH
+                    </button>
                   )}
                 </div>
               </div>
@@ -98,7 +141,11 @@ function BookDetail(props) {
             <div className="bee-scroll">
               <div className="comments-section col">
                 {book.listComments?.map((item, index) => (
-                  <CommentItem comment={item} key={item._id} />
+                  <CommentItem
+                    handleBanComment={handleBanComment}
+                    comment={item}
+                    key={item._id}
+                  />
                 ))}
               </div>
             </div>
@@ -107,14 +154,19 @@ function BookDetail(props) {
       </div>
       <div className="bee-card-footer">
         <div className="actions">
-          <button className="bee-btn yellow" onClick={() => {}}>
+          <button
+            className="bee-btn yellow"
+            onClick={() => {
+              handleViewBookModify();
+            }}
+          >
             <BookIcon />
             CHỈNH SỬA
           </button>
           {book.is_active === 1 ? (
             <button
               className="bee-btn red"
-              onClick={() => handleBanBook(book._id, 1, book.name)}
+              onClick={() => handleBanBook(book._id, 0, book.name)}
             >
               <LockIcon />
               KHÓA
@@ -122,7 +174,7 @@ function BookDetail(props) {
           ) : (
             <button
               className="bee-btn blue"
-              onClick={() => handleBanBook(book._id, 0, book.name)}
+              onClick={() => handleBanBook(book._id, 1, book.name)}
             >
               <UnlockIcon />
               MỞ KHÓA
@@ -130,6 +182,11 @@ function BookDetail(props) {
           )}
         </div>
       </div>
+      <BookViewer
+        pdf={bookViewer}
+        show={showBookViewer}
+        setShow={setShowBookViewer}
+      />
     </div>
   );
 }

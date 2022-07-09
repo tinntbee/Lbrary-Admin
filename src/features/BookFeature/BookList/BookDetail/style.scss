@@ -62,6 +62,12 @@
             font-weight: 700;
             font-size: 20px;
             color: #ffffff;
+            & > a {
+              color: #ffffff;
+              &:active {
+                color: #f9b700;
+              }
+            }
           }
           & > .author {
             font-weight: 300;
@@ -98,6 +104,7 @@
             max-height: 80px;
             gap: 5px;
             border-radius: 5px;
+            margin-bottom: 5px;
             & > .tag {
               width: fit-content;
               min-width: fit-content;

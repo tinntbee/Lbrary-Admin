@@ -1,0 +1,77 @@
+.modify-book-container {
+  width: fit-content;
+  height: fit-content;
+  min-width: 400px;
+  min-height: 400px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+
+  & > .bee-card-body {
+    & > .file-section {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      margin-top: 10px;
+      & > .file-box {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        & > .file-intro {
+          width: 247px;
+          height: fit-content;
+          // border: 1px dashed #e0e0e0;
+          border-radius: 5px;
+          position: relative;
+          & > .place-holder {
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            & > p,
+            & > i {
+              font-weight: 300;
+              font-size: 14px;
+              color: #ffffff;
+            }
+          }
+          & > .bee-btn {
+            width: 100%;
+          }
+          & > .pdf-viewer,
+          & > .image-intro {
+            margin: 10px 0;
+          }
+          & > .cancel-g-btn {
+            margin-top: 10px;
+          }
+          & > .image-intro {
+            height: 393px;
+            width: 247px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            box-shadow: 0px 12px 16px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+          }
+        }
+        & > p {
+          align-self: flex-end;
+          font-style: italic;
+          font-weight: 500;
+          font-size: 14px;
+          color: #e0e0e0;
+        }
+      }
+    }
+    & > .info-section {
+      min-width: 500px;
+      max-width: 500px;
+      max-height: 700px;
+    }
+  }
+}
