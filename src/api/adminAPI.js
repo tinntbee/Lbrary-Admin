@@ -63,6 +63,10 @@ const adminAPI = {
   },
 
   //NOTE: User manage
+  checkExistEmailUser: ({ email }) => {
+    const url = "/admin/checkExistEmailUser";
+    return axiosClient.post(url, { email });
+  },
   getAllUser: () => {
     const url = "/admin/getAllUser";
     return axiosClient.get(url);
@@ -77,6 +81,10 @@ const adminAPI = {
   },
   modifyUser: (user) => {
     const url = "/admin/modifyUser";
+    return axiosClient.put(url, user);
+  },
+  createUser: (user) => {
+    const url = "/admin/createUser";
     return axiosClient.put(url, user);
   },
   //NOTE: Tag manage

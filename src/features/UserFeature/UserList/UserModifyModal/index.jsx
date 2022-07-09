@@ -33,7 +33,22 @@ function UserModifyModal(props) {
     email: yup
       .string("Email Sinh viên")
       .email("Email không hợp lệ")
-      .required("Email là trường bắt buộc"),
+      .required("Email là trường bắt buộc")
+      .test("Exist Email Check", "Email đã tồn tại", (value) => {
+        if (value && value !== user.email) {
+          return adminAPI
+            .checkExistEmailUser({ email: value })
+            .then(() => true)
+            .catch((error) => {
+              if (error.response.status === 406) {
+                return false;
+              }
+              return true;
+            });
+        } else {
+          return true;
+        }
+      }),
     dob: yup.date().max(yesterday, "Ngày sinh không hợp lệ").required(),
     avatar: yup.string(),
   });

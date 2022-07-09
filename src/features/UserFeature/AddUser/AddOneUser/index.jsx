@@ -8,13 +8,18 @@ import { Grid, makeStyles } from "@material-ui/core";
 import SelectField from "../../../../components/SelectField";
 import sexOptions from "../../../../utils/sexOptions";
 import useStyles from "../../../../utils/useStyles";
+import adminAPI from "../../../../api/adminAPI";
+import LoadingAnimationIcon from "../../../../components/Icon/Animation/LoadingAnimationIcon";
+import { useSnackbar } from "notistack";
 
 function AddOneUser(props) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { className } = props;
   const classes = useStyles();
   const images = imageAvatarList;
   const faculties = facultyOptions;
   const [indexAvatar, setIndexAvatar] = React.useState(0);
+  const [pending, setPending] = React.useState(false);
   const [user, setUser] = React.useState({
     nickname: "",
     name: "",
@@ -35,7 +40,22 @@ function AddOneUser(props) {
     email: yup
       .string("Email Sinh viên")
       .email("Email không hợp lệ")
-      .required("Email là trường bắt buộc"),
+      .required("Email là trường bắt buộc")
+      .test("Exist Email Check", "Email đã tồn tại", (value) => {
+        if (value) {
+          return adminAPI
+            .checkExistEmailUser({ email: value })
+            .then(() => true)
+            .catch((error) => {
+              if (error.response.status === 406) {
+                return false;
+              }
+              return true;
+            });
+        } else {
+          return true;
+        }
+      }),
     dob: yup.date().max(yesterday, "Ngày sinh không hợp lệ").required(),
     avatar: yup.string(),
   });
@@ -49,8 +69,31 @@ function AddOneUser(props) {
     },
   });
   function submitCreateUser(values) {
-    values = { ...values, avatar: images[indexAvatar].url };
-    alert(JSON.stringify(values, null, 2));
+    setPending(true);
+    let user = { ...values, avatar: images[indexAvatar].url };
+    adminAPI
+      .createUser(user)
+      .then((res) => {
+        formik.handleReset();
+        enqueueSnackbar(`Đã tạo thành công ${user.name}!`, {
+          variant: "success",
+        });
+        setPending(false);
+      })
+      .catch((err) => {
+        setPending(false);
+        switch (err.response.status) {
+          case 406:
+            enqueueSnackbar(`Email đã tồn tại!`, {
+              variant: "error",
+            });
+            return;
+          default:
+            enqueueSnackbar(`Lỗi bất định!`, {
+              variant: "error",
+            });
+        }
+      });
   }
   return (
     <div className={"bee-card add-one-user-container " + className}>
@@ -127,6 +170,7 @@ function AddOneUser(props) {
             </form>
           </FormikProvider>
         </div>
+        {pending && <LoadingAnimationIcon className="absolute" />}
       </div>
       <div className="bee-card-footer">
         <div className="right">
