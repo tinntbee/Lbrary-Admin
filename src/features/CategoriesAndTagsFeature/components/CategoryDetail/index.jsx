@@ -59,13 +59,9 @@ function CategoryDetail(props) {
     }
 
     //NOTE: upload Thumbnail
-    if (thumbnail.file) {
+    if (!thumbnail.file) {
       const path =
-        "/categories/thumbnail/" +
-        thumbnail.file.name.split(".").slice(0, -1).join(".") +
-        "-ver" +
-        Date.now() +
-        ".pdf";
+        "/categories/thumbnail/" + "-ver" + Date.now() + thumbnail.file.name;
       const url = await filesService.uploadTaskPromise(path, thumbnail.file);
       categorySave.thumbnail = url;
     }

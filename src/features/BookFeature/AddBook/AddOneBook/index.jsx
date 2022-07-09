@@ -55,7 +55,7 @@ function AddOneBook(props) {
   const handlePdfChange = (e) => {
     var file = e.target.files[0];
     var url = URL.createObjectURL(file);
-    setPdf({ ...thumbnail, url: url, file: file, key: "" });
+    setPdf({ ...pdf, url: url, file: file, key: "" });
     return () => URL.revokeObjectURL(url);
   };
   const handleRequestPasswordAndPages = (required, pages, _) => {

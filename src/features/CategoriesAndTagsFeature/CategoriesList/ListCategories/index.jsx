@@ -88,7 +88,7 @@ function ListCategories(props) {
             <button
               className="bee-btn red"
               style={{ padding: 0 }}
-              onClick={() => handleBanCategory(row._id, 1, row.name)}
+              onClick={() => handleBanCategory(row._id, 0, row.name)}
             >
               <LockIcon />
             </button>
@@ -96,7 +96,7 @@ function ListCategories(props) {
             <button
               className="bee-btn blue"
               style={{ padding: 0 }}
-              onClick={() => handleBanCategory(row._id, 0, row.name)}
+              onClick={() => handleBanCategory(row._id, 1, row.name)}
             >
               <UnlockIcon />
             </button>
@@ -124,6 +124,18 @@ function ListCategories(props) {
   React.useEffect(() => {
     setFilteredCategories([...categories]);
   }, [categories]);
+  React.useEffect(() => {
+    var newFilteredCategories = categories.filter((category) => {
+      return (
+        category.name.toLowerCase().includes(filter) ||
+        category.quote.toLowerCase().includes(filter) ||
+        category.tags.filter((c) => c.name.toLowerCase().includes(filter))
+          .length > 0 ||
+        category.color.toLowerCase().includes(filter)
+      );
+    });
+    setFilteredCategories([...newFilteredCategories]);
+  }, [categories, filter]);
 
   const handleRowSelected = React.useCallback((state) => {
     setSelectedRows(state.selectedRows);
@@ -132,18 +144,28 @@ function ListCategories(props) {
     setFilter(str.toLowerCase());
   }
   const contextActions = React.useMemo(() => {
-    function handleBanMultiCategories(is_banned) {
+    function handleBanMultiCategories(is_active) {
       selectedRows.forEach((row) => {
-        // handleBanUser(row._id, is_banned, row.name);
+        handleBanCategory(row._id, is_active, row.name);
       });
     }
 
     return (
       <>
-        <button className="bee-btn blue" onClick={() => {}}>
+        <button
+          className="bee-btn blue"
+          onClick={() => {
+            handleBanMultiCategories(1);
+          }}
+        >
           Mở khóa
         </button>
-        <button onClick={() => {}} className="bee-btn red">
+        <button
+          onClick={() => {
+            handleBanMultiCategories(0);
+          }}
+          className="bee-btn red"
+        >
           Khóa
         </button>
       </>

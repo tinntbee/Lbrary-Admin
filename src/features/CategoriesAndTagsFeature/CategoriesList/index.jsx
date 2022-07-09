@@ -19,6 +19,7 @@ function CategoriesList(props) {
     name: "",
     tags: [],
     color: "",
+    thumbnail: "",
   });
   const [categoryPending, setCategoryPending] = React.useState(false);
   const [showCategoryModifyPopup, setShowCategoryModifyPopup] =
@@ -40,6 +41,7 @@ function CategoriesList(props) {
       name: "",
       tags: [],
       color: "",
+      thumbnail: "",
     });
     setShowCategoryModifyPopup(true);
   }
@@ -74,8 +76,9 @@ function CategoriesList(props) {
         });
       })
       .catch((err) => {
+        setCategoryPending(false);
         if (err.respond.status === 406) {
-          enqueueSnackbar(`Tên thẻ đã tồn tại!`, {
+          enqueueSnackbar(`Tên danh mục đã tồn tại!`, {
             variant: "error",
           });
         } else {
@@ -85,7 +88,60 @@ function CategoriesList(props) {
         }
       });
   }
-  function handleCreateCategory() {}
+  function handleCreateCategory(category) {
+    setCategoryPending(true);
+    adminAPI
+      .createCategory(category)
+      .then((res) => {
+        console.log({ res });
+        let newCategories = [...categories];
+        if (res) {
+          newCategories.push(res);
+          setCategories([...newCategories]);
+          setCategory(res);
+        }
+        setCategoryPending(false);
+        setShowCategoryModifyPopup(false);
+        enqueueSnackbar(`Tạo danh mục thành công!`, {
+          variant: "success",
+        });
+      })
+      .catch((err) => {
+        setCategoryPending(false);
+        if (err.respond.status === 406) {
+          enqueueSnackbar(`Tên danh mục đã tồn tại!`, {
+            variant: "error",
+          });
+        } else {
+          enqueueSnackbar(`Thao tác thất bại!`, {
+            variant: "error",
+          });
+        }
+      });
+  }
+  function handleBanCategory(_id, is_active, name) {
+    adminAPI
+      .banCategory({ _id: _id, is_active: is_active })
+      .then((res) => {
+        let newCategories = [...categories];
+        newCategories.find((e) => e._id === _id).is_active = res.is_active;
+        setCategories([...newCategories]);
+        if (is_active === 0) {
+          enqueueSnackbar(`Đã khóa: "${name}"!`, {
+            variant: "success",
+          });
+        } else {
+          enqueueSnackbar(`Đã mở khóa: "${name}"!`, {
+            variant: "success",
+          });
+        }
+      })
+      .catch((e) => {
+        enqueueSnackbar(`Thao tác thất bại!`, {
+          variant: "error",
+        });
+      });
+  }
   React.useEffect(() => {
     fetchCategories();
   }, []);
@@ -96,6 +152,7 @@ function CategoriesList(props) {
         categories={categories}
         handleViewCategory={handleViewCategory}
         handleShowNewCategory={handleShowNewCategory}
+        handleBanCategory={handleBanCategory}
       />
       <CategoryModifyPopup
         show={showCategoryModifyPopup}
@@ -104,6 +161,7 @@ function CategoriesList(props) {
         handleModifyCategory={handleModifyCategory}
         pending={categoryPending}
         handleCreateCategory={handleCreateCategory}
+        setPending={setCategoryPending}
       />
     </div>
   );

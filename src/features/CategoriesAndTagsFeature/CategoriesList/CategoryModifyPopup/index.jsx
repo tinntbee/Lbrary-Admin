@@ -13,18 +13,21 @@ import { useSnackbar } from "notistack";
 import TagsMultiSelectField from "../../../../components/TagsMultiSelectField";
 import "./style.scss";
 import UploadIcon from "../../../../components/Icon/UploadIcon";
+import { filesService } from "../../../../services/filesService";
+import sleep from "../../../../utils/sleep";
 
 CategoryModifyPopup.propTypes = {};
 
 function CategoryModifyPopup(props) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
-    show = true,
-    category = {},
+    show,
+    category,
     setShow,
     handleModifyCategory,
     handleCreateCategory,
     pending,
+    setPending,
   } = props;
   const classes = useStyles();
   const [thumbnail, setThumbnail] = React.useState({ url: "", file: null });
@@ -60,17 +63,59 @@ function CategoryModifyPopup(props) {
       submitModifyCategory(values);
     },
   });
-  function submitModifyCategory(values) {
+  async function submitModifyCategory(values) {
+    setPending(true);
+    let url = thumbnail.url;
     var listIdTags = [];
     values.tags.forEach((tag) => {
       listIdTags.push(tag._id);
     });
+    if (listIdTags.length === 0) {
+      enqueueSnackbar(`Vui lòng thêm thẻ cho danh mục!`, {
+        variant: "warning",
+      });
+      setPending(false);
+      return;
+    }
     console.log({ ...values, tags: listIdTags });
+    if (thumbnail.file) {
+      const path =
+        "/categories/thumbnail/thumbnail-ver" +
+        Date.now() +
+        "-" +
+        thumbnail.file.name;
+      url = await filesService.uploadTaskPromise(path, thumbnail.file);
+      setThumbnail({ ...thumbnail, url: url });
+      await sleep(1000);
+    }
 
-    if (values._id && values._id !== "new") {
-      handleModifyCategory({ ...values, tags: listIdTags });
+    if (url && url !== "") {
+      if (values._id && values._id !== "new") {
+        handleModifyCategory({
+          ...values,
+          tags: listIdTags,
+          thumbnail: url,
+        });
+      } else {
+        handleCreateCategory({ ...values, thumbnail: url });
+      }
     } else {
-      //   handleCreateCategory(values);
+      enqueueSnackbar(`Vui lòng tải lên file ảnh!`, {
+        variant: "warning",
+      });
+      setPending(false);
+    }
+  }
+  function handleInputThumbnailChange(event) {
+    var file = event.target.files[0];
+    var url = URL.createObjectURL(file);
+    setThumbnail({ ...thumbnail, url: url, file: file });
+    event.target.value = null;
+    return () => URL.revokeObjectURL(url);
+  }
+  function recoverThumbnail() {
+    if (category.thumbnail) {
+      setThumbnail({ url: category.thumbnail, file: null });
     }
   }
   const fetchAllTags = async () => {
@@ -123,10 +168,23 @@ function CategoryModifyPopup(props) {
               <button className="bee-btn yellow" style={{ width: "100%" }}>
                 <UploadIcon />
                 Lựa chọn ảnh chủ đề
-                <input type={"file"} accept=".png,.jpg,.gif" />
+                <input
+                  type={"file"}
+                  accept=".png,.jpg,.gif"
+                  onChange={handleInputThumbnailChange}
+                />
               </button>
               {thumbnail.url && (
                 <img alt="" className="thumbnail" src={thumbnail.url} />
+              )}
+              {thumbnail.file && category.thumbnail && (
+                <button
+                  className="bee-btn red"
+                  style={{ width: "100%" }}
+                  onClick={recoverThumbnail}
+                >
+                  Phục hồi ảnh
+                </button>
               )}
             </div>
             <div className="information-section">
